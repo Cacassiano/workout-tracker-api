@@ -5,6 +5,7 @@ import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -24,7 +25,7 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "exercises",
         joinColumns = @JoinColumn(name="workout_id"),
@@ -32,11 +33,17 @@ public class Workout {
     )
     private Set<Exercise> exercises;
 
-    @Column(name = "title" , unique = false, nullable = false)
+    @Column(name = "title" , unique = false, nullable = false, columnDefinition = "text")
     private String title;
 
     @Column(name = "scheduled_date", unique = false, nullable = false)
     private LocalDateTime scheduledDate;
+
+    @Column(name = "schedule_type", length = 7, nullable = false, unique = false)
+    private String scheduleType;
+
+    @Column(name = "completed", nullable = false, unique = false)
+    private Boolean completed;
 
     @Column(name = "created_at", unique = false, nullable = false)
     private LocalDateTime createdAt;

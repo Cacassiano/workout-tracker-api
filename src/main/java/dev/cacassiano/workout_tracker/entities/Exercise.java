@@ -27,10 +27,10 @@ public class Exercise {
     @Column(name = "title", unique = false, nullable = false, columnDefinition = "text")
     private String title;
 
-    @Column(name = "repetitions", unique = false, nullable = false)
+    @Column(name = "repetitions", unique = false, nullable = true)
     private Integer reps;
 
-    @Column(name = "series", unique = false, nullable = false)
+    @Column(name = "series", unique = false, nullable = true)
     private Integer series;
 
     @JsonBackReference

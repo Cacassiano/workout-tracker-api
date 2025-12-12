@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import dev.cacassiano.workout_tracker.DTOs.WorkoutReqDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +25,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Workout {
+
+    public Workout(WorkoutReqDTO req, Set<Exercise> exercises) {
+        this.title = req.getTitle();
+        this.scheduleType = req.getSchedule_type();
+        this.scheduledDate = req.getScheduled_date();
+        this.completed = req.getCompleted();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
+        this.exercises = exercises;
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

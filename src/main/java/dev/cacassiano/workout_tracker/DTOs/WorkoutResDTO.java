@@ -14,6 +14,7 @@ public record WorkoutResDTO(
     Boolean completed,
     LocalDateTime created_at,
     LocalDateTime updated_at,
+    // TODO ExerciseResDTO
     Set<Exercise> exercises
 ) {
     public WorkoutResDTO(Workout w){

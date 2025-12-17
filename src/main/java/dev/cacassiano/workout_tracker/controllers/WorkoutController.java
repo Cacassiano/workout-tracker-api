@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.cacassiano.workout_tracker.DTOs.ResponseDTO;
 import dev.cacassiano.workout_tracker.DTOs.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.WorkoutResDTO;
 import dev.cacassiano.workout_tracker.entities.Workout;
@@ -24,19 +25,22 @@ public class WorkoutController {
     private WorkoutService workoutService;
 
     @GetMapping
-    public ResponseEntity<List<WorkoutResDTO>> getAllWorkouts() {
+    public ResponseEntity<ResponseDTO<List<WorkoutResDTO>>> getAllWorkouts() {
         List<WorkoutResDTO> workouts = workoutService.getAllWorkouts().stream()
             .map(WorkoutResDTO::new)
             .toList();
-        return ResponseEntity.ok(workouts);
+
+        return ResponseEntity.ok(new ResponseDTO<>(workouts));
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutResDTO> createWorkout(@RequestBody WorkoutReqDTO req) {
+    public ResponseEntity<ResponseDTO<WorkoutResDTO>> createWorkout(@RequestBody WorkoutReqDTO req) {
         Workout workout = workoutService.saveWorkout(req);
+        WorkoutResDTO dto = new WorkoutResDTO(workout);
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new WorkoutResDTO(workout));
+            .body(new ResponseDTO<>(dto));
     }
+    
 }

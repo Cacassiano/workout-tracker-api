@@ -34,7 +34,6 @@ public class WorkoutService {
         });
 
         return workoutRepository.save(new Workout(req, exercises));
-
     }
     public Workout saveWorkout(Workout workout) {
         return workoutRepository.save(workout);

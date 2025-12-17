@@ -3,7 +3,6 @@ package dev.cacassiano.workout_tracker.DTOs;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.Workout;
 
 public record WorkoutResDTO(
@@ -12,10 +11,8 @@ public record WorkoutResDTO(
     LocalDateTime scheduled_date,
     String schedule_type,
     Boolean completed,
-    LocalDateTime created_at,
-    LocalDateTime updated_at,
     // TODO ExerciseResDTO
-    Set<Exercise> exercises
+    Set<ExerciseResDTO> exercises
 ) {
     public WorkoutResDTO(Workout w){
         this(
@@ -24,9 +21,7 @@ public record WorkoutResDTO(
             w.getScheduledDate(),
             w.getScheduleType(),
             w.getCompleted(),
-            w.getCreatedAt(),
-            w.getUpdatedAt(),
-            w.getExercises()
+            ExerciseResDTO.convertAll(w.getExercises())
         );
     }
 }

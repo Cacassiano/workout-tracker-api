@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dev.cacassiano.workout_tracker.DTOs.ExerciseReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.Workout;
@@ -21,11 +22,9 @@ public class WorkoutService {
     @Autowired
     private ExerciseService exerciseService;
 
-    // UPDATE and INSERT
-    public Workout saveWorkout(WorkoutReqDTO req) {
+    private Set<Exercise> getExerciseReferences(Set<ExerciseReqDTO> reqExercises) {
         Set<Exercise> exercises = new HashSet<>();
-        
-        req.getExercises().forEach(e -> {
+        reqExercises.forEach(e -> {
             if (e.getId() != null) {
                 exercises.add(exerciseService.getExerciseReferenceById(e.getId()));
                 return;
@@ -33,18 +32,39 @@ public class WorkoutService {
             exercises.add(new Exercise(e));
         });
 
-        return workoutRepository.save(new Workout(req, exercises));
+        return exercises;
     }
-    public Workout saveWorkout(Workout workout) {
+
+    // UPDATE and INSERT
+    public void updateStatus(Boolean completed, Long id) {
+        workoutRepository.updateStatus(completed, id);
+    }
+
+    @Transactional
+    public Workout updateWorkout(WorkoutReqDTO req, Long id){
+        Set<Exercise> exercises = this.getExerciseReferences(req.getExercises());
+
+        Workout workout = workoutRepository.getReferenceById(id);
+        workout.update(req, exercises);
+
         return workoutRepository.save(workout);
     }
 
+    @Transactional
+    public Workout saveWorkout(WorkoutReqDTO req) {
+        Set<Exercise> exercises = this.getExerciseReferences(req.getExercises());
+
+        return workoutRepository.save(new Workout(req, exercises));
+    }
+
     // DELETE
+    @Transactional
     public void deleteWorkoutById(Long id){
         workoutRepository.deleteById(id);
     }
 
     // SELECT
+    @Transactional
     public List<Workout> getAllWorkouts() {
         return workoutRepository.findAllWithExercises();
     }

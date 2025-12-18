@@ -36,6 +36,15 @@ public class Workout {
         this.exercises = exercises;
     }
 
+    public void update(WorkoutReqDTO req, Set<Exercise> exercises) {
+        this.title = req.getTitle();
+        this.scheduleType = req.getSchedule_type();
+        this.scheduledDate = req.getScheduled_date();
+        this.completed = req.getCompleted();
+        this.updatedAt = LocalDateTime.now();
+        this.exercises = exercises;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

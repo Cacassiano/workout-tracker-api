@@ -64,6 +64,7 @@ public class WorkoutController {
         @RequestBody @Valid @NotNull PatchStatusDTO req,
         @PathVariable Long id
     ) {
+        // TODO retornar o workout e devolver para o usuário
         workoutService.updateStatus(req.getCompleted(), id);
         return ResponseEntity.ok().build();
     }

@@ -11,7 +11,6 @@ public record WorkoutResDTO(
     LocalDateTime scheduled_date,
     String schedule_type,
     Boolean completed,
-    // TODO ExerciseResDTO
     Set<ExerciseResDTO> exercises
 ) {
     public WorkoutResDTO(Workout w){

@@ -23,9 +23,11 @@ import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.services.WorkoutService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/workouts")
+@Slf4j
 public class WorkoutController {
 
     @Autowired
@@ -33,6 +35,7 @@ public class WorkoutController {
 
     @GetMapping
     public ResponseEntity<ResponseDTO<List<WorkoutResDTO>>> getAllWorkouts() {
+        log.info("Starting the getAllWorkouts funtion");
         List<WorkoutResDTO> workouts = workoutService.getAllWorkouts().stream()
             .map(WorkoutResDTO::new)
             .toList();
@@ -42,6 +45,7 @@ public class WorkoutController {
 
     @PostMapping
     public ResponseEntity<ResponseDTO<WorkoutResDTO>> createWorkout(@RequestBody @Valid WorkoutReqDTO req) {
+        log.info("Starting the createWorkout funtion");
         Workout workout = workoutService.saveWorkout(req);
         WorkoutResDTO dto = new WorkoutResDTO(workout);
 
@@ -53,6 +57,7 @@ public class WorkoutController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDTO<WorkoutResDTO>> updateWorkout(@PathVariable Long id, @RequestBody @Valid WorkoutReqDTO req) {
+        log.info("Starting the updateWorkout funtion");
         Workout workout = workoutService.updateWorkout(req, id);
         WorkoutResDTO res = new WorkoutResDTO(workout);
 
@@ -60,10 +65,11 @@ public class WorkoutController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Void> updateWorkoutsStatus(
+    public ResponseEntity<Void> updateWorkoutStatus(
         @RequestBody @Valid @NotNull PatchStatusDTO req,
         @PathVariable Long id
     ) {
+        log.info("Starting the updateWorkoutStatus funtion");
         // TODO retornar o workout e devolver para o usuário
         workoutService.updateStatus(req.getCompleted(), id);
         return ResponseEntity.ok().build();
@@ -71,6 +77,7 @@ public class WorkoutController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWorkout(@PathVariable Long id){
+        log.info("Starting the deleteWorkout funtion");
         workoutService.deleteWorkoutById(id);
         return ResponseEntity.noContent().build();
     }

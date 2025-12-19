@@ -21,6 +21,8 @@ import dev.cacassiano.workout_tracker.DTOs.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.WorkoutResDTO;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.services.WorkoutService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +36,10 @@ public class WorkoutController {
     private WorkoutService workoutService;
 
     @GetMapping
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Get all workouts Sucessefuly"),
+        @ApiResponse(responseCode = "500", description = "Can't get the workouts from db")
+    })
     public ResponseEntity<ResponseDTO<List<WorkoutResDTO>>> getAllWorkouts() {
         log.info("Starting the getAllWorkouts funtion");
         List<WorkoutResDTO> workouts = workoutService.getAllWorkouts().stream()
@@ -43,7 +49,13 @@ public class WorkoutController {
         return ResponseEntity.ok(new ResponseDTO<>(workouts));
     }
 
+
     @PostMapping
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Create the workout sucessesfuly"),
+        @ApiResponse(responseCode = "400", description = "Invalid or missing values on the request body"),
+        @ApiResponse(responseCode = "500", description = "Can't insert the workouts into the db")
+    })
     public ResponseEntity<ResponseDTO<WorkoutResDTO>> createWorkout(@RequestBody @Valid WorkoutReqDTO req) {
         log.info("Starting the createWorkout funtion");
         Workout workout = workoutService.saveWorkout(req);
@@ -56,6 +68,11 @@ public class WorkoutController {
     
 
     @PutMapping("/{id}")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Update the entity workout sucessesfuly"),
+        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body"),
+        @ApiResponse(responseCode = "500", description = "Something went wrong when updating")
+    })
     public ResponseEntity<ResponseDTO<WorkoutResDTO>> updateWorkout(@PathVariable Long id, @RequestBody @Valid WorkoutReqDTO req) {
         log.info("Starting the updateWorkout funtion");
         Workout workout = workoutService.updateWorkout(req, id);
@@ -65,6 +82,11 @@ public class WorkoutController {
     }
 
     @PatchMapping("/{id}/status")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Update sucessfuly the status of the workout"),
+        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body"),
+        @ApiResponse(responseCode = "500", description = "Something went wrong when updating")
+    })
     public ResponseEntity<Void> updateWorkoutStatus(
         @RequestBody @Valid @NotNull PatchStatusDTO req,
         @PathVariable Long id
@@ -76,6 +98,10 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "delete sucessfuly the status of the workout"),
+        @ApiResponse(responseCode = "400", description = "Invalid or missing id")
+    })
     public ResponseEntity<Void> deleteWorkout(@PathVariable Long id){
         log.info("Starting the deleteWorkout funtion");
         workoutService.deleteWorkoutById(id);

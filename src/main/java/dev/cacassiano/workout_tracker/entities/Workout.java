@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import dev.cacassiano.workout_tracker.DTOs.WorkoutReqDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -26,22 +29,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Workout {
 
-    public Workout(WorkoutReqDTO req, Set<Exercise> exercises) {
-        this.title = req.getTitle();
-        this.scheduleType = req.getSchedule_type();
-        this.scheduledDate = req.getScheduled_date();
-        this.completed = req.getCompleted();
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = this.createdAt;
-        this.exercises = exercises;
-    }
-
     public void update(WorkoutReqDTO req, Set<Exercise> exercises) {
         this.title = req.getTitle();
         this.scheduleType = req.getSchedule_type();
         this.scheduledDate = req.getScheduled_date();
         this.completed = req.getCompleted();
-        this.updatedAt = LocalDateTime.now();
         this.exercises = exercises;
     }
 
@@ -77,5 +69,19 @@ public class Workout {
     @Column(name = "updated_at", unique = false, nullable = false)
     private LocalDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true, name = "user_id")
+    private User user;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
 }

@@ -1,4 +1,4 @@
-package dev.cacassiano.workout_tracker.DTOs;
+package dev.cacassiano.workout_tracker.DTOs.workouts;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

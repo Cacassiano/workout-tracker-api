@@ -1,4 +1,4 @@
-package dev.cacassiano.workout_tracker.DTOs;
+package dev.cacassiano.workout_tracker.DTOs.exercises;
 
 import java.util.Collection;
 import java.util.Set;

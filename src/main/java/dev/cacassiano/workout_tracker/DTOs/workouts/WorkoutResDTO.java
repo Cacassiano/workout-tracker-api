@@ -1,8 +1,9 @@
-package dev.cacassiano.workout_tracker.DTOs;
+package dev.cacassiano.workout_tracker.DTOs.workouts;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseResDTO;
 import dev.cacassiano.workout_tracker.entities.Workout;
 
 public record WorkoutResDTO(

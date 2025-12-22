@@ -1,4 +1,4 @@
-CREATE TABLE workout_exercises(
+CREATE TABLE IF NOT EXISTS workout_exercises(
     workout_id bigint NOT NULL,
     exercise_id BIGSERIAL NOT NULL
 );

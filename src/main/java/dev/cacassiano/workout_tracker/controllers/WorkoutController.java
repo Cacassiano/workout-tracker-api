@@ -15,23 +15,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.cacassiano.workout_tracker.DTOs.PatchStatusDTO;
 import dev.cacassiano.workout_tracker.DTOs.ResponseDTO;
-import dev.cacassiano.workout_tracker.DTOs.WorkoutReqDTO;
-import dev.cacassiano.workout_tracker.DTOs.WorkoutResDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.PatchStatusDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutResDTO;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.services.WorkoutService;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/workouts")
 @Slf4j
+@SecurityScheme(bearerFormat = "JWT", description = "Login token", type = SecuritySchemeType.HTTP, name="AuthToken", scheme = "bearer")
+@SecurityRequirement(name = "AuthToken")
 public class WorkoutController {
-
     @Autowired
     private WorkoutService workoutService;
 
@@ -82,17 +85,17 @@ public class WorkoutController {
     }
 
     @PatchMapping("/{id}/status")
+
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Update sucessfuly the status of the workout"),
         @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body"),
         @ApiResponse(responseCode = "500", description = "Something went wrong when updating")
     })
     public ResponseEntity<Void> updateWorkoutStatus(
-        @RequestBody @Valid @NotNull PatchStatusDTO req,
+        @RequestBody @Valid PatchStatusDTO req,
         @PathVariable Long id
     ) {
         log.info("Starting the updateWorkoutStatus funtion");
-        // TODO retornar o workout e devolver para o usuário
         workoutService.updateStatus(req.getCompleted(), id);
         return ResponseEntity.ok().build();
     }

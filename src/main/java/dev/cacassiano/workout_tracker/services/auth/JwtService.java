@@ -3,12 +3,16 @@ package dev.cacassiano.workout_tracker.services.auth;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
-@Component
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
 public class JwtService {
 
     @Value("${secret.key}")
@@ -18,26 +22,44 @@ public class JwtService {
     @Value("${jwt.expiration-ms}")
     private Long expirationMs;
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String id) {
         Algorithm algorithm = Algorithm.HMAC512(jwtSecret.getBytes());
         Date now = new Date();
         Date expiresAt = new Date(now.getTime() + expirationMs);
 
         return JWT.create()
             .withSubject(email)
+            .withClaim("user_id", id)
             .withIssuedAt(now)
             .withExpiresAt(expiresAt)
             .sign(algorithm);
     }
 
-    public String getEmailFromToken(String token) {
+    private DecodedJWT decodeJwt(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC512(jwtSecret.getBytes());
             return JWT.require(algorithm).build()
-                .verify(token)
-                .getSubject();
+                .verify(token);
+                
         } catch (Exception ex) {
+            log.error("Error on decodeJwt {}", ex.getMessage(), ex);
             return null;
         }
+    }
+
+    public String getEmailFromToken(String token){
+        DecodedJWT decodedJWT = decodeJwt(token);
+        if (decodedJWT == null) {
+            return null;
+        }
+        return decodedJWT.getSubject();
+    }
+    // TODO exeception handler
+    public String getIdFromToken(String token){
+        DecodedJWT decodedJWT = decodeJwt(token);
+        if (decodedJWT == null) {
+            return null;
+        }
+        return decodedJWT.getClaim("user_id").asString();
     }
 }

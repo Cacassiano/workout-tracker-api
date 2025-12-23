@@ -9,7 +9,7 @@ import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.repositories.UserRepository;
 
 @Service
-public class AuthService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -40,6 +40,10 @@ public class AuthService {
             throw new IllegalArgumentException("invalid credentials");
         }
 
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user.getEmail(), user.getId());
+    }
+
+    public User getUserReferenceById(String id){
+        return userRepository.getReferenceById(id);
     }
 }

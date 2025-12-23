@@ -24,12 +24,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Exercise {
 
-    public Exercise(ExerciseReqDTO req) {
+    public Exercise(ExerciseReqDTO req, User user) {
         this.title = req.getTitle();
         this.reps = req.getReps();
         this.series = req.getSeries();
+        this.user = user;
     }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -29,12 +29,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Workout {
 
-    public void update(WorkoutReqDTO req, Set<Exercise> exercises) {
+    public void update(WorkoutReqDTO req, Set<Exercise> exercises, User user) {
         this.title = req.getTitle();
         this.scheduleType = req.getSchedule_type();
         this.scheduledDate = req.getScheduled_date();
         this.completed = req.getCompleted();
         this.exercises = exercises;
+        if (user != null) {
+            this.user = user;
+        }
     }
 
 

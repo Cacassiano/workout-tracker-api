@@ -11,7 +11,7 @@ public class ExerciseService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public Exercise getExerciseReferenceById(Long id) {
-        return exerciseRepository.getReferenceById(id);
+    public Exercise findExerciseById(Long id, String userId) {
+        return exerciseRepository.findByIdAndUser(id, userId).get();
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.cacassiano.workout_tracker.DTOs.auth.TokenResponseDTO;
 import dev.cacassiano.workout_tracker.DTOs.auth.UserRequestDTO;
-import dev.cacassiano.workout_tracker.services.auth.AuthService;
+import dev.cacassiano.workout_tracker.services.auth.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     @Autowired
-    private AuthService authService;
+    private UserService authService;
     @PostMapping("/register")
     @ApiResponses(value = {
         @ApiResponse(description = "Register a new User", responseCode = "201"),

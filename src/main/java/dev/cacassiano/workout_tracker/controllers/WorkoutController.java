@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.cacassiano.workout_tracker.DTOs.DataDTO;
+import dev.cacassiano.workout_tracker.DTOs.pagination.PageDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.PatchStatusDTO;
-import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutPageDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutResDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutSummaryDTO;
@@ -57,7 +57,7 @@ public class WorkoutController {
         @ApiResponse(responseCode = "200", description = "Get all workouts Sucessefuly"),
         @ApiResponse(responseCode = "500", description = "Can't get the workouts from db")
     })
-    public ResponseEntity<WorkoutPageDTO<?>> getAllWorkouts(
+    public ResponseEntity<PageDTO<?>> getAllWorkouts(
         @RequestParam("exercises") Boolean withExercises, 
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token,
@@ -77,13 +77,13 @@ public class WorkoutController {
 
         if (!withExercises) {
             Collection<WorkoutSummaryDTO> data = workoutPage.getContent().stream().map(WorkoutSummaryDTO::new).toList();
-            WorkoutPageDTO<WorkoutSummaryDTO> dto = new WorkoutPageDTO<>(workoutPage, data);
+            PageDTO<WorkoutSummaryDTO> dto = new PageDTO<>(workoutPage, data);
 
             return ResponseEntity.ok(dto);
         } 
         
         Collection<WorkoutResDTO> data = workoutPage.getContent().stream().map(WorkoutResDTO::new).toList();
-        WorkoutPageDTO<WorkoutResDTO> dto = new WorkoutPageDTO<>(workoutPage, data);
+        PageDTO<WorkoutResDTO> dto = new PageDTO<>(workoutPage, data);
 
         return ResponseEntity.ok(dto);
     }

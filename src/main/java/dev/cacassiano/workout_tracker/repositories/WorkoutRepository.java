@@ -1,8 +1,8 @@
 package dev.cacassiano.workout_tracker.repositories;
 
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,7 +21,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>{
     Long deleteByIdAndCount(@Param("id") Long id);
 
     @Query(value = "SELECT w FROM workout w JOIN FETCH w.exercises WHERE w.user.id=:userId")
-    List<Workout> findAllWithExercises(@Param("userId") String userId);
+    Page<Workout> findAllWithExercises(@Param("userId") String userId, Pageable pageable);
 
     @Modifying
     @Query(value = "UPDATE workouts SET completed=:completed, updated_at = NOW() WHERE id=:id", nativeQuery = true)

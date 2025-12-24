@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
@@ -80,7 +82,7 @@ public class WorkoutService {
 
     // SELECT
     @Transactional
-    public List<Workout> getAllWorkouts(String userId, Boolean withExercises) {
-        return workoutRepository.findAllWithExercises(userId);
+    public Page<Workout> getAllWorkouts(String userId, Boolean withExercises, Pageable pageable) {
+        return workoutRepository.findAllWithExercises(userId, pageable);
     }
 }

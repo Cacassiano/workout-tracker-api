@@ -1,6 +1,6 @@
 package dev.cacassiano.workout_tracker.DTOs;
 
-public record ResponseDTO<T>(
+public record DataDTO<T>(
     T data
 ){
 }

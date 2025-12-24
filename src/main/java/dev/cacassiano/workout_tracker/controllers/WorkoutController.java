@@ -1,8 +1,10 @@
 package dev.cacassiano.workout_tracker.controllers;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.cacassiano.workout_tracker.DTOs.ResponseDTO;
+import dev.cacassiano.workout_tracker.DTOs.DataDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.PatchStatusDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutPageDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutResDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutSummaryDTO;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.services.WorkoutService;
@@ -53,10 +57,11 @@ public class WorkoutController {
         @ApiResponse(responseCode = "200", description = "Get all workouts Sucessefuly"),
         @ApiResponse(responseCode = "500", description = "Can't get the workouts from db")
     })
-    public ResponseEntity<ResponseDTO<List<WorkoutResDTO>>> getAllWorkouts(
+    public ResponseEntity<WorkoutPageDTO<?>> getAllWorkouts(
         @RequestParam("exercises") Boolean withExercises, 
         @Parameter(hidden = true)
-        @RequestHeader("Authorization") String token
+        @RequestHeader("Authorization") String token,
+        Pageable pageable
     ) {
         
         // Get userId from token
@@ -67,11 +72,12 @@ public class WorkoutController {
 
         // find the workouts and map then to DTO version
         log.info("Starting the getAllWorkouts funtion");
-        List<WorkoutResDTO> workouts = workoutService.getAllWorkouts(userId, withExercises).stream()
-            .map(WorkoutResDTO::new)
-            .toList();
 
-        return ResponseEntity.ok(new ResponseDTO<>(workouts));
+        Page<Workout> workoutPage = workoutService.getAllWorkouts(userId, withExercises, pageable);
+        Collection<WorkoutSummaryDTO> data = workoutPage.getContent().stream().map(WorkoutSummaryDTO::new).toList();
+        WorkoutPageDTO<WorkoutSummaryDTO> dto = new WorkoutPageDTO<>(workoutPage, data);
+
+        return ResponseEntity.ok(dto);
     }
 
 
@@ -81,7 +87,7 @@ public class WorkoutController {
         @ApiResponse(responseCode = "400", description = "Invalid or missing values on the request body"),
         @ApiResponse(responseCode = "500", description = "Can't insert the workouts into the db")
     })
-    public ResponseEntity<ResponseDTO<WorkoutResDTO>> createWorkout(
+    public ResponseEntity<DataDTO<WorkoutResDTO>> createWorkout(
         @RequestBody @Valid WorkoutReqDTO req, 
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token
@@ -102,7 +108,7 @@ public class WorkoutController {
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(new ResponseDTO<>(dto));
+            .body(new DataDTO<>(dto));
     }
     
 
@@ -112,7 +118,7 @@ public class WorkoutController {
         @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body"),
         @ApiResponse(responseCode = "500", description = "Something went wrong when updating")
     })
-    public ResponseEntity<ResponseDTO<WorkoutResDTO>> updateWorkout(
+    public ResponseEntity<DataDTO<WorkoutResDTO>> updateWorkout(
         @PathVariable Long id, 
         @RequestBody @Valid WorkoutReqDTO req,
         @Parameter(hidden = true)
@@ -133,7 +139,7 @@ public class WorkoutController {
         log.info("Creating DTO with workout: {}", workout);
         WorkoutResDTO res = new WorkoutResDTO(workout);
 
-        return ResponseEntity.ok(new ResponseDTO<>(res));
+        return ResponseEntity.ok(new DataDTO<>(res));
     }
 
     @PatchMapping("/{id}/status")

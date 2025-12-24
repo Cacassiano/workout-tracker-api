@@ -77,14 +77,14 @@ public class Workout {
     private User user;
 
     @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+    private void prePersist() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
     }
 
     @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
+    private void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
 }

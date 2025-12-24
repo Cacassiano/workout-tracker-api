@@ -24,7 +24,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>{
     List<Workout> findAllWithExercises(@Param("userId") String userId);
 
     @Modifying
-    @Query(value = "UPDATE workouts SET completed=:completed WHERE id=:id", nativeQuery = true)
+    @Query(value = "UPDATE workouts SET completed=:completed, updated_at = NOW() WHERE id=:id", nativeQuery = true)
     int updateStatus(@Param("completed") Boolean completed, @Param("id")Long id);
 
     @Query(value = "SELECT w FROM workout w WHERE w.user.id=:userId AND w.id=:id LIMIT 1")

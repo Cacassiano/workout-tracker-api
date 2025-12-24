@@ -1,5 +1,6 @@
 package dev.cacassiano.workout_tracker.entities;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -14,6 +15,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +31,7 @@ public class Exercise {
         this.title = req.getTitle();
         this.reps = req.getReps();
         this.series = req.getSeries();
+        this.category = req.getCategory();
         this.user = user;
     }
 
@@ -37,6 +41,9 @@ public class Exercise {
 
     @Column(name = "title", unique = false, nullable = false, columnDefinition = "text")
     private String title;
+
+    @Column(name = "category", nullable = false, unique = false)
+    private String category;
 
     @Column(name = "repetitions", unique = false, nullable = true)
     private Integer reps;
@@ -48,7 +55,26 @@ public class Exercise {
     @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
     private Set<Workout> workouts;
 
+    @Column(name = "created_at", nullable = false, unique = false)
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at", nullable = false, unique = false)
+    private LocalDateTime updatedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = true, name = "user_id")
     private User user;
+
+    @PrePersist
+    private void prePersist(){
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = this.createdAt;
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    
 }

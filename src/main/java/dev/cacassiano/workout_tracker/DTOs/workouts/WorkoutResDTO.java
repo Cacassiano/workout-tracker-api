@@ -12,6 +12,8 @@ public record WorkoutResDTO(
     LocalDateTime scheduled_date,
     String schedule_type,
     Boolean completed,
+    LocalDateTime created_at,
+    LocalDateTime updated_at,
     Set<ExerciseResDTO> exercises
 ) {
     public WorkoutResDTO(Workout w){
@@ -21,6 +23,8 @@ public record WorkoutResDTO(
             w.getScheduledDate(),
             w.getScheduleType(),
             w.getCompleted(),
+            w.getCreatedAt(),
+            w.getUpdatedAt(),
             ExerciseResDTO.convertAll(w.getExercises())
         );
     }

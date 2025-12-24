@@ -74,8 +74,16 @@ public class WorkoutController {
         log.info("Starting the getAllWorkouts funtion");
 
         Page<Workout> workoutPage = workoutService.getAllWorkouts(userId, withExercises, pageable);
-        Collection<WorkoutSummaryDTO> data = workoutPage.getContent().stream().map(WorkoutSummaryDTO::new).toList();
-        WorkoutPageDTO<WorkoutSummaryDTO> dto = new WorkoutPageDTO<>(workoutPage, data);
+
+        if (!withExercises) {
+            Collection<WorkoutSummaryDTO> data = workoutPage.getContent().stream().map(WorkoutSummaryDTO::new).toList();
+            WorkoutPageDTO<WorkoutSummaryDTO> dto = new WorkoutPageDTO<>(workoutPage, data);
+
+            return ResponseEntity.ok(dto);
+        } 
+        
+        Collection<WorkoutResDTO> data = workoutPage.getContent().stream().map(WorkoutResDTO::new).toList();
+        WorkoutPageDTO<WorkoutResDTO> dto = new WorkoutPageDTO<>(workoutPage, data);
 
         return ResponseEntity.ok(dto);
     }

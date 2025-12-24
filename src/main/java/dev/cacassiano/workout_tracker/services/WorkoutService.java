@@ -1,7 +1,6 @@
 package dev.cacassiano.workout_tracker.services;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +82,9 @@ public class WorkoutService {
     // SELECT
     @Transactional
     public Page<Workout> getAllWorkouts(String userId, Boolean withExercises, Pageable pageable) {
-        return workoutRepository.findAllWithExercises(userId, pageable);
+        if (withExercises) {
+            return workoutRepository.findAllWithExercises(userId, pageable);
+        }
+        return workoutRepository.findAllWorkouts(userId, pageable);
     }
 }

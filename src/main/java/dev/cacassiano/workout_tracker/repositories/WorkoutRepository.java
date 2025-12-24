@@ -23,6 +23,9 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>{
     @Query(value = "SELECT w FROM workout w JOIN FETCH w.exercises WHERE w.user.id=:userId")
     Page<Workout> findAllWithExercises(@Param("userId") String userId, Pageable pageable);
 
+    @Query(value = "SELECT w FROM workout w WHERE w.user.id=:userId")
+    Page<Workout> findAllWorkouts(@Param("userId") String userId, Pageable pageable);
+
     @Modifying
     @Query(value = "UPDATE workouts SET completed=:completed, updated_at = NOW() WHERE id=:id", nativeQuery = true)
     int updateStatus(@Param("completed") Boolean completed, @Param("id")Long id);

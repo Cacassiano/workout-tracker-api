@@ -58,7 +58,8 @@ public class WorkoutController {
         @ApiResponse(responseCode = "500", description = "Can't get the workouts from db")
     })
     public ResponseEntity<PageDTO<?>> getAllWorkouts(
-        @RequestParam("exercises") Boolean withExercises, 
+        @RequestParam("showExercises") Boolean withExercises, 
+        @RequestParam("onlyDefaults") Boolean onlyDefaults,
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token,
         Pageable pageable
@@ -66,14 +67,15 @@ public class WorkoutController {
         
         // Get userId from token
         String userId = jwtService.getIdFromToken(token.substring(7));
-        log.info("Get user id {}", userId);
+        log.info("Get userId {}", userId);
+        User user = onlyDefaults ? null : userService.getUserReferenceById(userId);
         // Validate withExercises Query param
         withExercises = withExercises == null ? false : withExercises;
 
         // find the workouts and map then to DTO version
         log.info("Starting the getAllWorkouts funtion");
 
-        Page<Workout> workoutPage = workoutService.getAllWorkouts(userId, withExercises, pageable);
+        Page<Workout> workoutPage = workoutService.getAllWorkouts(user, withExercises, pageable);
 
         if (!withExercises) {
             Collection<WorkoutSummaryDTO> data = workoutPage.getContent().stream().map(WorkoutSummaryDTO::new).toList();

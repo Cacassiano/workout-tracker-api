@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
 
 
@@ -20,11 +21,11 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>{
     @Query(nativeQuery = true, value = "DELETE FROM workout_exercises WHERE workout_id=:id;\nDELETE FROM workouts WHERE id=:id;")
     Long deleteByIdAndCount(@Param("id") Long id);
 
-    @Query(value = "SELECT w FROM workout w JOIN FETCH w.exercises WHERE w.user.id=:userId")
-    Page<Workout> findAllWithExercises(@Param("userId") String userId, Pageable pageable);
+    @Query(value = "SELECT w FROM workout w JOIN FETCH w.exercises WHERE w.user IS NOT DISTINCT FROM :user")
+    Page<Workout> findAllWithExercises(@Param("user") User user, Pageable pageable);
 
-    @Query(value = "SELECT w FROM workout w WHERE w.user.id=:userId")
-    Page<Workout> findAllWorkouts(@Param("userId") String userId, Pageable pageable);
+    @Query(value = "SELECT w FROM workout w WHERE w.user IS NOT DISTINCT FROM :user")
+    Page<Workout> findAllWorkouts(@Param("user") User user, Pageable pageable);
 
     @Modifying
     @Query(value = "UPDATE workouts SET completed=:completed, updated_at = NOW() WHERE id=:id", nativeQuery = true)

@@ -81,10 +81,10 @@ public class WorkoutService {
 
     // SELECT
     @Transactional
-    public Page<Workout> getAllWorkouts(String userId, Boolean withExercises, Pageable pageable) {
+    public Page<Workout> getAllWorkouts(User user, Boolean withExercises, Pageable pageable) {
         if (withExercises) {
-            return workoutRepository.findAllWithExercises(userId, pageable);
+            return workoutRepository.findAllWithExercises(user, pageable);
         }
-        return workoutRepository.findAllWorkouts(userId, pageable);
+        return workoutRepository.findAllWorkouts(user, pageable);
     }
 }

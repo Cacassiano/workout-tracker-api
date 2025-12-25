@@ -26,7 +26,7 @@ public class SpringSecurityConfig {
             .csrf(csfr -> csfr.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(req -> req
-                .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
             )

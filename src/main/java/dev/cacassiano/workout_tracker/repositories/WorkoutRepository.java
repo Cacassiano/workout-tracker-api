@@ -28,8 +28,8 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>{
     Page<Workout> findAllWorkouts(@Param("user") User user, Pageable pageable);
 
     @Modifying
-    @Query(value = "UPDATE workouts SET completed=:completed, updated_at = NOW() WHERE id=:id", nativeQuery = true)
-    int updateStatus(@Param("completed") Boolean completed, @Param("id")Long id);
+    @Query(value = "UPDATE workouts SET completed=:completed, updated_at = NOW() WHERE id=:id and user_id = :userId", nativeQuery = true)
+    int updateStatus(@Param("completed") Boolean completed, @Param("id")Long id, @Param("userId") String userId);
 
     @Query(value = "SELECT w FROM workout w WHERE w.user.id=:userId AND w.id=:id LIMIT 1")
     @EntityGraph(attributePaths = {})

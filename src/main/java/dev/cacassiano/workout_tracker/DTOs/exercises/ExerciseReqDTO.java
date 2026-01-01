@@ -1,5 +1,6 @@
 package dev.cacassiano.workout_tracker.DTOs.exercises;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 
 @Getter
@@ -12,7 +13,7 @@ public class ExerciseReqDTO {
     private Integer series;
 
 
-    public ExerciseReqDTO(Long id, String title, String category,Integer reps, Integer series) throws Exception{
+    public ExerciseReqDTO(Long id, String title, String category,Integer reps, Integer series) throws ConstraintViolationException{
         if (id != null && id>0) {
             this.id = id;
             return;
@@ -24,7 +25,7 @@ public class ExerciseReqDTO {
             this.category = category;
             return;
         }
-
-        throw new Exception("Invalid request");
+        
+        throw new ConstraintViolationException("Invalid request", null);
     }
 }

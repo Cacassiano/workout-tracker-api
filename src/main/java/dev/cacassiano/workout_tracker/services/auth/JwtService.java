@@ -36,30 +36,17 @@ public class JwtService {
     }
 
     private DecodedJWT decodeJwt(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC512(jwtSecret.getBytes());
-            return JWT.require(algorithm).build()
-                .verify(token);
-                
-        } catch (Exception ex) {
-            log.error("Error on decodeJwt {}", ex.getMessage(), ex);
-            return null;
-        }
+        Algorithm algorithm = Algorithm.HMAC512(jwtSecret.getBytes());
+        return JWT.require(algorithm).build()
+            .verify(token);
     }
 
     public String getEmailFromToken(String token){
         DecodedJWT decodedJWT = decodeJwt(token);
-        if (decodedJWT == null) {
-            return null;
-        }
         return decodedJWT.getSubject();
     }
-    // TODO exeception handler
     public String getIdFromToken(String token){
         DecodedJWT decodedJWT = decodeJwt(token);
-        if (decodedJWT == null) {
-            return null;
-        }
         return decodedJWT.getClaim("user_id").asString();
     }
 }

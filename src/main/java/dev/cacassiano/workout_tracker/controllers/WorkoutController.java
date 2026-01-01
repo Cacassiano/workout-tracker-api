@@ -27,6 +27,7 @@ import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutResDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutSummaryDTO;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
+import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
 import dev.cacassiano.workout_tracker.services.WorkoutService;
 import dev.cacassiano.workout_tracker.services.auth.JwtService;
 import dev.cacassiano.workout_tracker.services.auth.UserService;
@@ -94,8 +95,7 @@ public class WorkoutController {
     @PostMapping
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Create the workout sucessesfuly"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing values on the request body"),
-        @ApiResponse(responseCode = "500", description = "Can't insert the workouts into the db")
+        @ApiResponse(responseCode = "400", description = "Invalid or missing values on the request body")
     })
     public ResponseEntity<DataDTO<WorkoutResDTO>> createWorkout(
         @RequestBody @Valid WorkoutReqDTO req, 
@@ -125,8 +125,7 @@ public class WorkoutController {
     @PutMapping("/{id}")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Update the entity workout sucessesfuly"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body"),
-        @ApiResponse(responseCode = "500", description = "Something went wrong when updating")
+        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body")
     })
     public ResponseEntity<DataDTO<WorkoutResDTO>> updateWorkout(
         @PathVariable Long id, 
@@ -156,15 +155,14 @@ public class WorkoutController {
 
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Update sucessfuly the status of the workout"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body"),
-        @ApiResponse(responseCode = "500", description = "Something went wrong when updating")
+        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body")
     })
     public ResponseEntity<Void> updateWorkoutStatus(
         @RequestBody @Valid PatchStatusDTO req,
         @PathVariable Long id,
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token
-    ) {
+    ) throws NotFoundException{
         // Get userId from token
         String userId = jwtService.getIdFromToken(token.substring(7));
         log.info("Get user id {}", userId);
@@ -184,7 +182,7 @@ public class WorkoutController {
         @PathVariable Long id, 
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token
-    ){
+    )  throws NotFoundException{
         // Get userId from token
         String userId = jwtService.getIdFromToken(token.substring(7));
         log.info("Get user id {}", userId);

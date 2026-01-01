@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -20,10 +22,20 @@ public class SpringSecurityConfig {
     @Autowired
     private JwtAuthorizationFilter jwtAuthorizationFilter;
 
+    @Autowired
+    private AccessDeniedHandler acessDeniedHandler;
+
+    @Autowired 
+    private AuthenticationEntryPoint authEntryPoint;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(csfr -> csfr.disable())
+            .exceptionHandling(ex -> ex
+                .accessDeniedHandler(acessDeniedHandler)
+                .authenticationEntryPoint(authEntryPoint)
+            )
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(req -> req
                 .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()

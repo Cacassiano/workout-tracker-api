@@ -19,13 +19,14 @@ public class AuthorizationEntryPoint implements AuthenticationEntryPoint{
 
     @Autowired
     private ObjectMapper mapper;
-
+    private final int STATUS_CODE = 401;
+    
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
 
-        ErrorResponse res = new ErrorResponse(authException.getMessage());
-        response.setStatus(401);
+        ErrorResponse res = new ErrorResponse(authException.getMessage(), STATUS_CODE);
+        response.setStatus(STATUS_CODE);
         response.setContentType("application/json");
         response.getWriter().write(mapper.writeValueAsString(res));
     }

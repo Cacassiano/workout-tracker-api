@@ -19,6 +19,7 @@ public class AcessDeniedHandler implements AccessDeniedHandler{
 
     @Autowired
     private ObjectMapper mapper;
+    private final int STATUS_CODE = 403;
 
     @Override
     public void handle(
@@ -27,8 +28,8 @@ public class AcessDeniedHandler implements AccessDeniedHandler{
         AccessDeniedException accessDeniedException
     ) throws IOException, ServletException {
 
-        ErrorResponse res = new ErrorResponse(accessDeniedException.getMessage());
-        response.setStatus(403);
+        ErrorResponse res = new ErrorResponse(accessDeniedException.getMessage(), STATUS_CODE);
+        response.setStatus(STATUS_CODE);
         response.setContentType("application/json");
         response.getWriter().write(mapper.writeValueAsString(res));
     }

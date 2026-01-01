@@ -17,10 +17,10 @@ public class UserRequestDTO {
     private String username;
 
     @NotBlank(message = "Email can't be blank")
-    @Email
+    @Email(message = "Must be a well formed email")
     private String email;
 
     @NotBlank(message = "Password can't be blank")
-    @Length(min = 8, message = "The min length of the password is 8")
+    @Length(min = 8, message = "The min length 8 characters")
     private String password;
 }

@@ -10,14 +10,17 @@ import lombok.Getter;
 public class ErrorResponse {
     private String messsage;
     private LocalDateTime timestamp;
+    private int status;
 
-    public ErrorResponse(Exception ex){
+    public ErrorResponse(Exception ex, int status){
         this.messsage = ex.getMessage();
         this.timestamp = LocalDateTime.now();
+        this.status = status;
     }
     
-    public ErrorResponse(String message) {
+    public ErrorResponse(String message, int status) {
         this.messsage = message;
         this.timestamp = LocalDateTime.now();
+        this.status = status;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -34,7 +35,6 @@ import dev.cacassiano.workout_tracker.services.auth.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
@@ -54,10 +54,7 @@ public class WorkoutController {
     private JwtService jwtService;
 
     @GetMapping
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Get all workouts Sucessefuly"),
-        @ApiResponse(responseCode = "500", description = "Can't get the workouts from db")
-    })
+    @ApiResponse(responseCode = "200", description = "Get all workouts Sucessefuly")
     public ResponseEntity<PageDTO<?>> getAllWorkouts(
         @RequestParam("showExercises") Boolean withExercises, 
         @RequestParam("onlyDefaults") Boolean onlyDefaults,
@@ -91,17 +88,13 @@ public class WorkoutController {
         return ResponseEntity.ok(dto);
     }
 
-
     @PostMapping
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Create the workout sucessesfuly"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing values on the request body")
-    })
+    @ApiResponse(responseCode = "201", description = "Create the workout sucessesfuly")
     public ResponseEntity<DataDTO<WorkoutResDTO>> createWorkout(
         @RequestBody @Valid WorkoutReqDTO req, 
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token
-    ) {
+    ) throws MethodArgumentNotValidException {
 
         // Get userId from token and Get a hibernate proxy from id
         String userId = jwtService.getIdFromToken(token.substring(7));
@@ -123,16 +116,13 @@ public class WorkoutController {
     
 
     @PutMapping("/{id}")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Update the entity workout sucessesfuly"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body")
-    })
+    @ApiResponse(responseCode = "200", description = "Update the entity workout sucessesfuly")
     public ResponseEntity<DataDTO<WorkoutResDTO>> updateWorkout(
         @PathVariable Long id, 
         @RequestBody @Valid WorkoutReqDTO req,
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token
-    ) {
+    ) throws MethodArgumentNotValidException{
         // Get userId from the token
         String userId = jwtService.getIdFromToken(token.substring(7));
         log.info("Get user id {}", userId);
@@ -152,17 +142,13 @@ public class WorkoutController {
     }
 
     @PatchMapping("/{id}/status")
-
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Update sucessfuly the status of the workout"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing values in the request body")
-    })
+    @ApiResponse(responseCode = "200", description = "Update sucessfuly the status of the workout")
     public ResponseEntity<Void> updateWorkoutStatus(
         @RequestBody @Valid PatchStatusDTO req,
         @PathVariable Long id,
         @Parameter(hidden = true)
         @RequestHeader("Authorization") String token
-    ) throws NotFoundException{
+    ) throws NotFoundException, MethodArgumentNotValidException{
         // Get userId from token
         String userId = jwtService.getIdFromToken(token.substring(7));
         log.info("Get user id {}", userId);
@@ -174,10 +160,7 @@ public class WorkoutController {
     }
 
     @DeleteMapping("/{id}")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "delete sucessfuly the status of the workout"),
-        @ApiResponse(responseCode = "400", description = "Invalid or missing id")
-    })
+    @ApiResponse(responseCode = "204", description = "delete sucessfuly the status of the workout")
     public ResponseEntity<Void> deleteWorkout(
         @PathVariable Long id, 
         @Parameter(hidden = true)

@@ -55,7 +55,7 @@ public class WorkoutController {
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "Get all workouts Sucessefuly")
-    public ResponseEntity<PageDTO<?>> getAllWorkouts(
+    public ResponseEntity<PageDTO<? extends WorkoutSummaryDTO>> getAllWorkouts(
         @RequestParam("showExercises") Boolean withExercises, 
         @RequestParam("onlyDefaults") Boolean onlyDefaults,
         @Parameter(hidden = true)

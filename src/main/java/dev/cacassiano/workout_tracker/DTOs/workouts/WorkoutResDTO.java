@@ -6,17 +6,17 @@ import lombok.Setter;
 
 import java.util.Set;
 
-import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseResDTO;
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseSummaryDTO;
 
 @Getter
 @Setter
 public class WorkoutResDTO extends WorkoutSummaryDTO{
 
-    Set<ExerciseResDTO> exercises;
+    Set<ExerciseSummaryDTO> exercises;
 
     public WorkoutResDTO(Workout w) {
         super(w);
-        this.exercises = ExerciseResDTO.convertAll(w.getExercises());
+        this.exercises = ExerciseSummaryDTO.convertAll(w.getExercises());
     }
     
 }

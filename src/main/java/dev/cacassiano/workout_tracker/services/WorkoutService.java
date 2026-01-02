@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
@@ -25,7 +25,7 @@ public class WorkoutService {
     @Autowired
     private ExerciseService exerciseService;
 
-    private Set<Exercise> getExerciseReferences(Set<ExerciseReqDTO> reqExercises, User user) {
+    private Set<Exercise> getExerciseReferences(Set<ExerciseReferenceReqDTO> reqExercises, User user) {
         Set<Exercise> exercises = new HashSet<>();
         reqExercises.forEach(e -> {
             if (e.getId() != null) {

@@ -4,7 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 
 @Getter
-public class ExerciseReqDTO {
+public class ExerciseReferenceReqDTO {
 
     private Long id;
     private String title;
@@ -13,7 +13,7 @@ public class ExerciseReqDTO {
     private Integer series;
 
 
-    public ExerciseReqDTO(Long id, String title, String category,Integer reps, Integer series) throws ConstraintViolationException{
+    public ExerciseReferenceReqDTO(Long id, String title, String category,Integer reps, Integer series) throws ConstraintViolationException{
         if (id != null && id>0) {
             this.id = id;
             return;

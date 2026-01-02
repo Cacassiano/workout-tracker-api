@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import dev.cacassiano.workout_tracker.controllers.AuthController;
-import dev.cacassiano.workout_tracker.controllers.WorkoutController;
 import dev.cacassiano.workout_tracker.errors.custom.ErrorResponse;
 import dev.cacassiano.workout_tracker.errors.custom.InvalidRequestResponse;
 import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
@@ -16,7 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-@RestControllerAdvice(assignableTypes = {AuthController.class, WorkoutController.class})
+@RestControllerAdvice
 public class GlobalControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)

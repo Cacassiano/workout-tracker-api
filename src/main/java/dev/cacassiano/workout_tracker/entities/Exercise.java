@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,7 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Exercise {
 
-    public Exercise(ExerciseReqDTO req, User user) {
+    public Exercise(ExerciseReferenceReqDTO req, User user) {
         this.title = req.getTitle();
         this.reps = req.getReps();
         this.series = req.getSeries();

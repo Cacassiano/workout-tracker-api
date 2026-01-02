@@ -3,7 +3,7 @@ package dev.cacassiano.workout_tracker.DTOs.workouts;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
 import dev.cacassiano.workout_tracker.services.enums.ScheduleTypes;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,9 +24,9 @@ public class WorkoutReqDTO {
     @NotNull
     private final Boolean completed;
 
-    private final Set<ExerciseReqDTO> exercises;
+    private final Set<ExerciseReferenceReqDTO> exercises;
 
-    public WorkoutReqDTO(String title, String schedule_type, LocalDateTime scheduled_date, Boolean completed, Set<ExerciseReqDTO> exercises){
+    public WorkoutReqDTO(String title, String schedule_type, LocalDateTime scheduled_date, Boolean completed, Set<ExerciseReferenceReqDTO> exercises){
         this.title = title;
         if (schedule_type == null) {
             throw new IllegalArgumentException("schedule_type cant be null");

@@ -28,6 +28,9 @@ public class WorkoutReqDTO {
 
     public WorkoutReqDTO(String title, String schedule_type, LocalDateTime scheduled_date, Boolean completed, Set<ExerciseReqDTO> exercises){
         this.title = title;
+        if (schedule_type == null) {
+            throw new IllegalArgumentException("schedule_type cant be null");
+        }
         ScheduleTypes.valueOf(schedule_type.toUpperCase());
         this.schedule_type = schedule_type.toUpperCase();
         this.scheduled_date = scheduled_date;

@@ -1,6 +1,7 @@
 package dev.cacassiano.workout_tracker.errors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -38,7 +39,19 @@ public class GlobalControllerAdvice {
     )
     public InvalidRequestResponse invalidRequestArgumentsHandler(MethodArgumentNotValidException ex){
         
-        return new InvalidRequestResponse(ex, 400);
+        return new InvalidRequestResponse(ex);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ApiResponse(
+        description = "invalid request content", 
+        responseCode = "400",
+        content = @Content(schema = @Schema(implementation = InvalidRequestResponse.class))
+    )
+    public InvalidRequestResponse invalidRequestArgumentsHandler(HttpMessageNotReadableException ex){
+        
+        return new InvalidRequestResponse(ex);
     }
 
     @ExceptionHandler(Exception.class)

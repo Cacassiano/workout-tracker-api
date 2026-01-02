@@ -8,18 +8,18 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ErrorResponse {
-    private String messsage;
+    private String message;
     private LocalDateTime timestamp;
     private int status;
 
     public ErrorResponse(Exception ex, int status){
-        this.messsage = ex.getMessage();
+        this.message = ex.getMessage();
         this.timestamp = LocalDateTime.now();
         this.status = status;
     }
     
     public ErrorResponse(String message, int status) {
-        this.messsage = message;
+        this.message = message;
         this.timestamp = LocalDateTime.now();
         this.status = status;
     }

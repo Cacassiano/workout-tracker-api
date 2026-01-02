@@ -22,10 +22,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Table(name = "workouts")
 @Entity(name = "workout")
 @Getter
+@Setter
 @NoArgsConstructor
 public class Workout {
 
@@ -38,6 +40,16 @@ public class Workout {
         if (user != null) {
             this.user = user;
         }
+    }
+
+    public Workout(Workout w){
+        this.id = w.getId();
+        this.title = w.getTitle();
+        this.scheduleType = w.getScheduleType();
+        this.scheduledDate = w.getScheduledDate();
+        this.completed = w.getCompleted();
+        this.exercises = w.getExercises();
+        this.user = w.getUser();
     }
 
 

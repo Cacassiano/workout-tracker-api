@@ -214,6 +214,7 @@ class WorkoutControllerTest {
 
     // ============ POST TESTS ============
 
+    @SuppressWarnings("unchecked")
     @Test
     @DisplayName("POST /api/workouts - Success")
     void testCreateWorkoutSuccess() throws Exception {
@@ -225,7 +226,7 @@ class WorkoutControllerTest {
             new HashSet<>()
         );
 
-        when(workoutService.saveWorkout(any(WorkoutReqDTO.class), any(User.class))).thenReturn(mockWorkout);
+        when(workoutService.saveWorkout(any(WorkoutReqDTO.class), any(User.class), any(Set.class))).thenReturn(mockWorkout);
 
         mockMvc.perform(
             post("/api/workouts")
@@ -256,6 +257,7 @@ class WorkoutControllerTest {
 
     // ============ PUT TESTS ============
 
+    @SuppressWarnings("unchecked")
     @Test
     @DisplayName("PUT /api/workouts/{id} - Success")
     void testUpdateWorkoutSuccess() throws Exception {
@@ -272,7 +274,7 @@ class WorkoutControllerTest {
         resWorkout.setTitle("Updated Workout");
         resWorkout.setScheduleType("MONTHLY");
 
-        when(workoutService.updateWorkout(any(WorkoutReqDTO.class), eq(1L), any(User.class)))
+        when(workoutService.updateWorkout(any(WorkoutReqDTO.class), eq(1L), any(User.class), any(Set.class)))
             .thenReturn(resWorkout);
 
         mockMvc.perform(

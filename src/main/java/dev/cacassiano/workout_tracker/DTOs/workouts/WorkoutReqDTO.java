@@ -6,24 +6,26 @@ import java.util.Set;
 import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
 import dev.cacassiano.workout_tracker.services.enums.ScheduleTypes;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
 public class WorkoutReqDTO {
     
-    @NotBlank
+    @NotBlank(message = "title cannot be blank")
     private final String title;
 
-    @NotBlank
+    @NotBlank(message = "schedule_type cannot be blank")
     private final String schedule_type;
 
-    @NotNull
+    @NotNull(message = "schedule_date cannot be null")
     private final LocalDateTime scheduled_date;
 
-    @NotNull
+    @NotNull(message = "completed cannot be null")
     private final Boolean completed;
 
+    @NotEmpty(message = "exercises cannot be empty")
     private final Set<ExerciseReferenceReqDTO> exercises;
 
     public WorkoutReqDTO(String title, String schedule_type, LocalDateTime scheduled_date, Boolean completed, Set<ExerciseReferenceReqDTO> exercises){

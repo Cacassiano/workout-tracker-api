@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.cacassiano.workout_tracker.DTOs.DataDTO;
+import dev.cacassiano.workout_tracker.DTOs.auth.TokenDTO;
 import dev.cacassiano.workout_tracker.DTOs.pagination.PageDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.PatchStatusDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
@@ -64,12 +65,12 @@ public class WorkoutController {
         @RequestParam("showExercises") Boolean withExercises, 
         @RequestParam("onlyDefaults") Boolean onlyDefaults,
         @Parameter(hidden = true)
-        @RequestHeader("Authorization") String token,
+        @RequestHeader("Authorization") TokenDTO token,
         Pageable pageable
     ) {
         
         // Get userId from token
-        String userId = jwtService.getIdFromToken(token.substring(7));
+        String userId = jwtService.getIdFromToken(token.getToken());
         log.info("Get userId {}", userId);
         User user = onlyDefaults ? null : userService.getUserReferenceById(userId);
         // Validate withExercises Query param
@@ -98,11 +99,11 @@ public class WorkoutController {
     public ResponseEntity<DataDTO<WorkoutResDTO>> createWorkout(
         @RequestBody @Valid WorkoutReqDTO req, 
         @Parameter(hidden = true)
-        @RequestHeader("Authorization") String token
+        @RequestHeader("Authorization") TokenDTO token
     ) throws MethodArgumentNotValidException {
 
         // Get userId from token and Get a hibernate proxy from id
-        String userId = jwtService.getIdFromToken(token.substring(7));
+        String userId = jwtService.getIdFromToken(token.getToken());
         log.info("Get user id {}", userId);
         User user = userService.getUserReferenceById(userId);
 
@@ -127,10 +128,10 @@ public class WorkoutController {
         @PathVariable Long id, 
         @RequestBody @Valid WorkoutReqDTO req,
         @Parameter(hidden = true)
-        @RequestHeader("Authorization") String token
+        @RequestHeader("Authorization") TokenDTO token
     ) throws MethodArgumentNotValidException{
         // Get userId from the token
-        String userId = jwtService.getIdFromToken(token.substring(7));
+        String userId = jwtService.getIdFromToken(token.getToken());
         log.info("Get user id {}", userId);
 
         User user = userService.getUserReferenceById(userId);
@@ -153,10 +154,10 @@ public class WorkoutController {
         @RequestBody @Valid PatchStatusDTO req,
         @PathVariable Long id,
         @Parameter(hidden = true)
-        @RequestHeader("Authorization") String token
+        @RequestHeader("Authorization") TokenDTO token
     ) throws NotFoundException, MethodArgumentNotValidException{
         // Get userId from token
-        String userId = jwtService.getIdFromToken(token.substring(7));
+        String userId = jwtService.getIdFromToken(token.getToken());
         log.info("Get user id {}", userId);
         log.info("Starting the updateWorkoutStatus funtion");
         // Updating the workout's status
@@ -170,10 +171,10 @@ public class WorkoutController {
     public ResponseEntity<Void> deleteWorkout(
         @PathVariable Long id, 
         @Parameter(hidden = true)
-        @RequestHeader("Authorization") String token
+        @RequestHeader("Authorization") TokenDTO token
     )  throws NotFoundException{
         // Get userId from token
-        String userId = jwtService.getIdFromToken(token.substring(7));
+        String userId = jwtService.getIdFromToken(token.getToken());
         log.info("Get user id {}", userId);
         // Try to delete workout
         log.info("Starting the deleteWorkout funtion");

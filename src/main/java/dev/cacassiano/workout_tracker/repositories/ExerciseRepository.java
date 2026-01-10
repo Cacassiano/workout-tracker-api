@@ -18,7 +18,7 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long>{
     Optional<Exercise> findByIdAndUser(@Param("id") Long id, @Param("userId") String userId);
 
     // Get all methods
-    @Query("SELECT e FROM exercise e JOIN FETCH e.workouts WHERE e.user IS NOT DISTINCT FROM :user")
+    @Query("SELECT e FROM exercise e LEFT JOIN FETCH e.workouts WHERE e.user IS NOT DISTINCT FROM :user")
     Page<Exercise> findAllAndFetchWorkouts(Pageable pageable, @Param("user") User user);
 
     @Query("SELECT e FROM exercise e WHERE e.user IS NOT DISTINCT FROM :user")

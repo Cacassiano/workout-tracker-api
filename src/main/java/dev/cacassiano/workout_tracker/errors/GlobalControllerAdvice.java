@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestControllerAdvice
+// TODO tratar DataIntegrityViolationException
 public class GlobalControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)

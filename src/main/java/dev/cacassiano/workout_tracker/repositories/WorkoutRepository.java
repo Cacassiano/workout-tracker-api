@@ -21,7 +21,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long>{
     @Query(nativeQuery = true, value = "DELETE FROM workout_exercises WHERE workout_id=:id;\nDELETE FROM workouts WHERE id=:id;")
     Long deleteByIdAndCount(@Param("id") Long id);
 
-    @Query(value = "SELECT w FROM workout w JOIN FETCH w.exercises WHERE w.user IS NOT DISTINCT FROM :user")
+    @Query(value = "SELECT w FROM workout w LEFT JOIN FETCH w.exercises WHERE w.user IS NOT DISTINCT FROM :user")
     Page<Workout> findAllWithExercises(@Param("user") User user, Pageable pageable);
 
     @Query(value = "SELECT w FROM workout w WHERE w.user IS NOT DISTINCT FROM :user")

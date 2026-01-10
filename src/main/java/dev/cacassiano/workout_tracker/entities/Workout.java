@@ -22,12 +22,14 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Table(name = "workouts")
 @Entity(name = "workout")
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Workout {
 
     public void update(WorkoutReqDTO req, Set<Exercise> exercises, User user) {
@@ -52,7 +54,6 @@ public class Workout {
     }
 
     public Workout(WorkouReferenceDTO ref, User user) {
-        this.id = ref.getId();
         this.title = ref.getTitle();
         this.scheduleType = ref.getSchedule_type();
         this.scheduledDate = ref.getScheduled_date();
@@ -100,7 +101,7 @@ public class Workout {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = this.createdAt;
     }
-
+    
     @PreUpdate
     private void preUpdate() {
         this.updatedAt = LocalDateTime.now();

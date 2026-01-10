@@ -3,10 +3,9 @@ package dev.cacassiano.workout_tracker.entities;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
@@ -63,8 +63,12 @@ public class Exercise {
     @Column(name = "series", unique = false, nullable = true)
     private Integer series;
 
-    @JsonBackReference
-    @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinTable(
+        name = "workout_exercises",
+        joinColumns = @JoinColumn(name = "exercise_id"),
+        inverseJoinColumns = @JoinColumn(name = "workout_id")
+    )
     private Set<Workout> workouts;
 
     @Column(name = "created_at", nullable = false, unique = false)

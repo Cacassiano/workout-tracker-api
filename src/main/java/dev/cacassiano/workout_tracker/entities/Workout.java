@@ -3,8 +3,6 @@ package dev.cacassiano.workout_tracker.entities;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkouReferenceDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import jakarta.persistence.CascadeType;
@@ -67,7 +65,6 @@ public class Workout {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonManagedReference
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY )
     @JoinTable(
         name = "workout_exercises",

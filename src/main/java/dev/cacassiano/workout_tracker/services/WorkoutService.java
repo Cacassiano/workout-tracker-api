@@ -16,9 +16,11 @@ import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
 import dev.cacassiano.workout_tracker.repositories.WorkoutRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
+@Slf4j
 public class WorkoutService {
     @Autowired
     private WorkoutRepository workoutRepository;
@@ -73,6 +75,10 @@ public class WorkoutService {
 
     public Set<Workout> filterAndGetWorkoutRefs(Set<WorkouReferenceDTO> refs, User user) {
         Set<Workout> workouts = new HashSet<>();
+        if (refs == null || refs.isEmpty()) {
+            log.info("returning a empty workout refs set");
+            return workouts;
+        }
         refs.forEach(e -> {
             if (e.getId() != null) {
                 workouts.add( getReferenceByIdAndUser(e.getId(), user) );
@@ -80,7 +86,7 @@ public class WorkoutService {
             }
             workouts.add( new Workout(e, user) );
         });
-
+        log.info("returning a {} length workout refs set", workouts.size());
         return workouts;
     }
 } 

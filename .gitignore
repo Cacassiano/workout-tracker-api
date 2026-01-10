@@ -35,3 +35,4 @@ build/
 TestController.java
 
 *.log
+logs.*

@@ -16,7 +16,7 @@ public class ExerciseSummaryDTO{
     private Long id;
     private String title;
     private String category;
-    private Integer respetitions;
+    private Integer reps;
     private Integer series;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
@@ -25,7 +25,7 @@ public class ExerciseSummaryDTO{
         this.id = e.getId();
         this.title = e.getTitle();
         this.category = e.getCategory();
-        this.respetitions = e.getReps();
+        this.reps = e.getReps();
         this.series = e.getSeries();
         this.created_at = e.getCreatedAt();
         this.updated_at = e.getUpdatedAt();

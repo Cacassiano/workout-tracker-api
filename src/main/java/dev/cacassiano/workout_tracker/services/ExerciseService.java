@@ -14,8 +14,10 @@ import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.repositories.ExerciseRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class ExerciseService {
 
     @Autowired
@@ -39,6 +41,11 @@ public class ExerciseService {
 
     public Set<Exercise> getExerciseReferences(Set<ExerciseReferenceReqDTO> reqExercises, User user) {
         Set<Exercise> exercises = new HashSet<>();
+        if (reqExercises == null || reqExercises.isEmpty()) {
+            log.info("returning a empty exercise ref set");
+            return exercises;
+        }
+        
         reqExercises.forEach(e -> {
             if (e.getId() != null) {
                 Exercise ex = findExerciseById(e.getId(), user.getId());
@@ -50,7 +57,7 @@ public class ExerciseService {
             }
             exercises.add(new Exercise(e, user));
         });
-
+        log.info("returning a {} length exercise set", exercises.size());
         return exercises;
     }
 }

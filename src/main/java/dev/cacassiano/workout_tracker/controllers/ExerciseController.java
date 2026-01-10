@@ -54,7 +54,8 @@ public class ExerciseController {
     private WorkoutService workoutService;    
 
     @GetMapping
-    @ApiResponse(responseCode = "200", description = "gets the workouts")
+    @ApiResponse(responseCode = "200", description = "gets the Exercises")
+    // TODO if a exercise dont have a workout it doesnt appear where withWorkouts = true
     public ResponseEntity<PageDTO<? extends ExerciseSummaryDTO>> getAll(
         Pageable pageable,
         @RequestParam("withWorkouts") Boolean withWorkouts,
@@ -68,7 +69,7 @@ public class ExerciseController {
 
         Page<Exercise> exercisePage = exerciseService.getAll(pageable, user, withWorkouts);
         log.info("find a page with {} elements", exercisePage.getNumberOfElements());
-        if (onlyDefaults) {
+        if (withWorkouts) {
             List<ExerciseResDTO> exercisesDTO = exercisePage.getContent().stream().map(ExerciseResDTO::new).toList();
             log.info("returning complete exercises DTO");
             PageDTO<ExerciseResDTO> dto = new PageDTO<ExerciseResDTO>(exercisePage, exercisesDTO);

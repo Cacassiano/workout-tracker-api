@@ -22,7 +22,7 @@ VALUES ('Supino Reto', 12, 4),
     ('Remada Alta', 12, 4),
     ('Corrida na Esteira', 30, 1);
 
--- Inserindo 10 workouts (após os exercícios)
+-- Inserindo 10 workouts
 INSERT INTO workouts (title, scheduled_date, schedule_type, completed, created_at, updated_at) 
 VALUES ('Treino de Peito', '2025-12-08 07:00:00', 'WEEKLY', false, NOW(), NOW()),
     ('Treino de Costas', '2025-12-09 07:00:00', 'WEEKLY', false, NOW(), NOW()),

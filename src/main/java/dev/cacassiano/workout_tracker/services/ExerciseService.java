@@ -60,7 +60,7 @@ public class ExerciseService {
         log.info("returning a {} length exercise set", exercises.size());
         return exercises;
     }
-    public Exercise updateUser(Long id, ExerciseReqDTO req, User user, Set<Workout> workouts) {
+    public Exercise updateExercise(Long id, ExerciseReqDTO req, User user, Set<Workout> workouts) {
         Exercise ex = findExerciseById(id, user.getId());
         ex.update(req, user, workouts);
         return exerciseRepository.save(ex);

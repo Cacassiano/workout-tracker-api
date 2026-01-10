@@ -118,7 +118,7 @@ public class ExerciseController {
         User user = userService.getUserReferenceById(userId);
 
         Set<Workout> workouts = workoutService.filterAndGetWorkoutRefs(req.getWorkouts(), user);
-        Exercise exercise = exerciseService.updateUser(id, req, user, workouts);
+        Exercise exercise = exerciseService.updateExercise(id, req, user, workouts);
         ExerciseResDTO dto = new ExerciseResDTO(exercise);
 
         return ResponseEntity.ok(new DataDTO<>(dto));

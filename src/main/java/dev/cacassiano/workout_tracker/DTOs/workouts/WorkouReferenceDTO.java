@@ -5,10 +5,8 @@ import java.time.LocalDateTime;
 import dev.cacassiano.workout_tracker.services.enums.ScheduleTypes;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class WorkouReferenceDTO {
     private Long id;
 

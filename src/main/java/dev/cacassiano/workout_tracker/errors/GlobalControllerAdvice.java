@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestControllerAdvice
 // TODO tratar DataIntegrityViolationException
+// TODO tratar org.hibernate.query.sqm.UnknownPathException
 public class GlobalControllerAdvice {
 
     @ExceptionHandler(NotFoundException.class)
@@ -61,6 +62,7 @@ public class GlobalControllerAdvice {
         content = @Content(schema = @Schema(implementation = ErrorResponse.class))
     )
     public ErrorResponse genericHandler(Exception ex){
+        ex.printStackTrace();
         return new ErrorResponse(ex, 500);
     }
 }

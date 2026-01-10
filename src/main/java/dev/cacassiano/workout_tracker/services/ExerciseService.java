@@ -13,11 +13,14 @@ import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
 import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
+import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
 import dev.cacassiano.workout_tracker.repositories.ExerciseRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Transactional
 public class ExerciseService {
 
     @Autowired
@@ -37,6 +40,22 @@ public class ExerciseService {
 
     public Exercise findExerciseById(Long id, String userId) {
         return exerciseRepository.findByIdAndUser(id, userId).get();
+    }
+
+    public void deleteExerciseById(Long id, String userId) {
+        long deletedCount = exerciseRepository.deleteExerciseById(id, userId);
+        if (deletedCount <=0) {
+            throw new NotFoundException("exercise not found for id: "+id);
+        }
+    }
+
+    public Exercise updateExercise(Long id, ExerciseReqDTO req, User user, Set<Workout> workouts) {
+        Exercise ex = findExerciseById(id, user.getId());
+        if (ex == null) {
+            throw new NotFoundException("exercise not found for id:"+id);
+        }
+        ex.update(req, user, workouts);
+        return exerciseRepository.save(ex);
     }
 
     public Set<Exercise> getExerciseReferences(Set<ExerciseReferenceReqDTO> reqExercises, User user) {
@@ -59,10 +78,5 @@ public class ExerciseService {
         });
         log.info("returning a {} length exercise set", exercises.size());
         return exercises;
-    }
-    public Exercise updateExercise(Long id, ExerciseReqDTO req, User user, Set<Workout> workouts) {
-        Exercise ex = findExerciseById(id, user.getId());
-        ex.update(req, user, workouts);
-        return exerciseRepository.save(ex);
-    }
+    } 
 }

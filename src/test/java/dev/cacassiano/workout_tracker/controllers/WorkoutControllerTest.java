@@ -35,12 +35,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.PatchStatusDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
+import dev.cacassiano.workout_tracker.services.ExerciseService;
 import dev.cacassiano.workout_tracker.services.WorkoutService;
 import dev.cacassiano.workout_tracker.services.auth.JwtService;
 import dev.cacassiano.workout_tracker.services.auth.UserService;
@@ -65,6 +68,9 @@ class WorkoutControllerTest {
 
     @MockitoBean
     private JwtService jwtService;
+
+    @MockitoBean
+    private ExerciseService exerciseService;
 
     @MockitoBean
     private UserDetailsService userDetailsService;
@@ -223,11 +229,11 @@ class WorkoutControllerTest {
             "WEEKLY",
             LocalDateTime.now(),
             false,
-            new HashSet<>()
+            Collections.singleton(new ExerciseReferenceReqDTO(1l, null, null, null, null))
         );
 
         when(workoutService.saveWorkout(any(WorkoutReqDTO.class), any(User.class), any(Set.class))).thenReturn(mockWorkout);
-
+        when(exerciseService.getExerciseReferences(anySet(), any())).thenReturn(Collections.singleton(new Exercise()));
         mockMvc.perform(
             post("/api/workouts")
                 .header("Authorization", mockToken)
@@ -266,7 +272,7 @@ class WorkoutControllerTest {
             "MONTHLY",
             LocalDateTime.now(),
             true,
-            new HashSet<>()
+            Collections.singleton(new ExerciseReferenceReqDTO(1l, null, null, null, null))
         );
         
         Workout resWorkout = new Workout(mockWorkout);
@@ -276,6 +282,7 @@ class WorkoutControllerTest {
 
         when(workoutService.updateWorkout(any(WorkoutReqDTO.class), eq(1L), any(User.class), any(Set.class)))
             .thenReturn(resWorkout);
+        when(exerciseService.getExerciseReferences(anySet(), any())).thenReturn(Collections.singleton(new Exercise()));
 
         mockMvc.perform(
             put("/api/workouts/1")

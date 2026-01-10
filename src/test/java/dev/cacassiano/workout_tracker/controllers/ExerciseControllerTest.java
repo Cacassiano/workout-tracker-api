@@ -24,12 +24,20 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReqDTO;
 import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
+import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
 import dev.cacassiano.workout_tracker.services.ExerciseService;
+import dev.cacassiano.workout_tracker.services.WorkoutService;
 import dev.cacassiano.workout_tracker.services.auth.JwtService;
 import dev.cacassiano.workout_tracker.services.auth.UserService;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import org.springframework.http.MediaType;
+import java.util.Collections;
 
 @SpringBootTest
 @DisplayName("ExerciseController Tests")
@@ -39,6 +47,9 @@ class ExerciseControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockitoBean
     private ExerciseService exerciseService;
 
@@ -47,6 +58,9 @@ class ExerciseControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @MockitoBean
+    private WorkoutService workoutService;
 
     private User mockUser;
     private Exercise mockExercise;
@@ -177,7 +191,7 @@ class ExerciseControllerTest {
         )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data[0].id").value(1))
-            .andExpect(jsonPath("$.data[0].respetitions").value(12));
+            .andExpect(jsonPath("$.data[0].reps").value(12));
     }
 
     @Test
@@ -257,5 +271,139 @@ class ExerciseControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data").isArray())
             .andExpect(jsonPath("$.data.length()").value(0));
+    }
+
+    // ============ POST TESTS ============
+
+    @Test
+    @DisplayName("POST /api/exercises - Success")
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void testCreateExerciseSuccess() throws Exception {
+        ExerciseReqDTO reqDTO = new ExerciseReqDTO(
+            "Push-up",
+            12,
+            4,
+            "Chest",
+            Collections.emptySet()
+        );
+
+        when(workoutService.filterAndGetWorkoutRefs(any(), any())).thenReturn(Collections.emptySet());
+        when(exerciseService.saveExercise(any(User.class), any(ExerciseReqDTO.class), any()))
+            .thenReturn(mockExercise);
+
+        mockMvc.perform(
+            post("/api/exercises")
+                .header("Authorization", "Bearer mockToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(reqDTO))
+        )
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.data.id").value(1))
+            .andExpect(jsonPath("$.data.title").value("Pushup"));
+    }
+
+    @Test
+    @DisplayName("POST /api/exercises - Error with invalid request body")
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void testCreateExerciseInvalidRequest() throws Exception {
+        String invalidBody = "{}";
+
+        mockMvc.perform(
+            post("/api/exercises")
+                .header("Authorization", "Bearer mockToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidBody)
+        )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400));
+    }
+
+    // ============ PUT TESTS ============
+
+    @Test
+    @DisplayName("PUT /api/exercises/{id} - Success")
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void testUpdateExerciseSuccess() throws Exception {
+        ExerciseReqDTO reqDTO = new ExerciseReqDTO(
+            "Updated Push-up",
+            15,
+            5,
+            "Upper Body",
+            Collections.emptySet()
+        );
+
+        Exercise updatedExercise = new Exercise();
+        updatedExercise.setId(1L);
+        updatedExercise.setTitle("Updated Push-up");
+        updatedExercise.setReps(15);
+        updatedExercise.setSeries(5);
+        updatedExercise.setCategory("Upper Body");
+        updatedExercise.setCreatedAt(LocalDateTime.now());
+        updatedExercise.setUpdatedAt(LocalDateTime.now());
+        updatedExercise.setWorkouts(new HashSet<>());
+
+        when(workoutService.filterAndGetWorkoutRefs(any(), any())).thenReturn(Collections.emptySet());
+        when(exerciseService.updateExercise(eq(1L), any(ExerciseReqDTO.class), any(User.class), any()))
+            .thenReturn(updatedExercise);
+
+        mockMvc.perform(
+            put("/api/exercises/1")
+                .header("Authorization", "Bearer mockToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(reqDTO))
+        )
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.id").value(1))
+            .andExpect(jsonPath("$.data.title").value("Updated Push-up"))
+            .andExpect(jsonPath("$.data.reps").value(15));
+    }
+
+    @Test
+    @DisplayName("PUT /api/exercises/{id} - Error with invalid request body")
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void testUpdateExerciseInvalidRequest() throws Exception {
+        String invalidBody = "{}";
+
+        mockMvc.perform(
+            put("/api/exercises/1")
+                .header("Authorization", "Bearer mockToken")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidBody)
+        )
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400));
+    }
+
+    // ============ DELETE TESTS ============
+
+    @Test
+    @DisplayName("DELETE /api/exercises/{id} - Success")
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void testDeleteExerciseSuccess() throws Exception {
+        doNothing().when(exerciseService).deleteExerciseById(eq(1L), eq(mockUser.getId()));
+
+        mockMvc.perform(
+            delete("/api/exercises/1")
+                .header("Authorization", "Bearer mockToken")
+        )
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("DELETE /api/exercises/{id} - Error with exercise not found")
+    @WithMockUser(username = "test@email.com", roles = "USER")
+    void testDeleteExerciseNotFound() throws Exception {
+        doThrow(new NotFoundException("Exercise not found for id: 999"))
+            .when(exerciseService).deleteExerciseById(eq(999L), eq(mockUser.getId()));
+
+        mockMvc.perform(
+            delete("/api/exercises/999")
+                .header("Authorization", "Bearer mockToken")
+        )
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.status").value(404))
+            .andExpect(jsonPath("$.message").value("Exercise not found for id: 999"))
+            .andDo(print());
     }
 }

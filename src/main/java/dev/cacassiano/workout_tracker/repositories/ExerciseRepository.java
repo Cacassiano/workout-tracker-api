@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,8 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long>{
 
     @Query("SELECT e FROM exercise e WHERE e.user IS NOT DISTINCT FROM :user")
     Page<Exercise> findAllExercise(Pageable pageable, @Param("user") User user);
+
+    @Modifying
+    @Query(value = "DELETE FROM exercise e WHERE e.id=:id AND e.user.id=:userId")
+    Long deleteExerciseById(@Param("id") Long id, @Param("userId") String userId);
 }

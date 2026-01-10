@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,9 +66,9 @@ public class ExerciseController {
         @RequestParam("onlyDefaults") Boolean onlyDefaults,
         @Parameter(hidden = true) @RequestHeader("Authorization") TokenDTO token
     ) {
-        log.info("starting getAll exercises with the params:\nPageable="+pageable.toString()+"\nwithWorkouts="+withWorkouts+"'\nonlyDefaults="+onlyDefaults);
+        log.info("starting getAll exercises endpoint with the params:\nPageable="+pageable.toString()+"\nwithWorkouts="+withWorkouts+"'\nonlyDefaults="+onlyDefaults);
         String userId = jwtService.getIdFromToken(token.getToken());
-        log.info("userId: {}", userId);
+        log.info("user id: {}", userId);
         User user = onlyDefaults ? null : userService.getUserReferenceById(userId);
 
         Page<Exercise> exercisePage = exerciseService.getAll(pageable, user, withWorkouts);
@@ -90,9 +91,9 @@ public class ExerciseController {
         @RequestBody @Valid ExerciseReqDTO req,
         @Parameter(hidden = true) @RequestHeader("Authorization") TokenDTO token
     ) throws MethodArgumentNotValidException {
-        log.info("Starting createExercise method {}", req);
+        log.info("starting createExercise endpoint {}", req);
         String userId = jwtService.getIdFromToken(token.getToken());
-        log.info("User id: {}", userId);
+        log.info("user id: {}", userId);
         User user = userService.getUserReferenceById(userId);
         req.getWorkouts().forEach(w -> log.info(w.toString()));
 
@@ -107,14 +108,15 @@ public class ExerciseController {
     }
 
     @PutMapping("/{id}")
+    @ApiResponse(responseCode = "200", description = "update the exercise ")
     public ResponseEntity<DataDTO<ExerciseResDTO>> updateExercise(
         @PathVariable Long id,
         @Parameter(hidden = true) @RequestHeader("Authorization") TokenDTO token,
         @RequestBody @Valid ExerciseReqDTO req
     ) {
-        log.info("starting updateExercise");
+        log.info("starting updateExercise endpoint");
         String userId = jwtService.getIdFromToken(token.getToken());
-        log.info("encountered the user with the id {}", userId);
+        log.info("user id: {}", userId);
         User user = userService.getUserReferenceById(userId);
 
         Set<Workout> workouts = workoutService.filterAndGetWorkoutRefs(req.getWorkouts(), user);
@@ -122,5 +124,22 @@ public class ExerciseController {
         ExerciseResDTO dto = new ExerciseResDTO(exercise);
 
         return ResponseEntity.ok(new DataDTO<>(dto));
+    }
+
+    @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "204", description = "sucessufuly delete the exercise")
+    public ResponseEntity<Void> deleteExercise(
+        @Parameter(hidden = true) @RequestHeader("Authorization") TokenDTO token,
+        @PathVariable Long id
+    ) {
+        log.info("starting deleteExercise endpoint");
+        String userId = jwtService.getIdFromToken(token.getToken());
+        log.info("user id: {}", userId);
+        
+        log.info("deleting exercise");
+        exerciseService.deleteExerciseById(id, userId);
+        log.info("exercise deleted sucessfuly");
+        
+        return ResponseEntity.noContent().build();
     }
 }

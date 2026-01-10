@@ -3,7 +3,7 @@ package dev.cacassiano.workout_tracker.entities;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import dev.cacassiano.workout_tracker.DTOs.workouts.WorkouReferenceDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReferenceDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -53,7 +53,7 @@ public class Workout {
         this.user = w.getUser();
     }
 
-    public Workout(WorkouReferenceDTO ref, User user) {
+    public Workout(WorkoutReferenceDTO ref, User user) {
         this.title = ref.getTitle();
         this.scheduleType = ref.getSchedule_type();
         this.scheduledDate = ref.getScheduled_date();

@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import dev.cacassiano.workout_tracker.DTOs.workouts.WorkouReferenceDTO;
+import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReferenceDTO;
 import dev.cacassiano.workout_tracker.DTOs.workouts.WorkoutReqDTO;
 import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
@@ -73,7 +73,7 @@ public class WorkoutService {
         return workoutRepository.getReferenceByIdAndUser(id, user.getId());
     }
 
-    public Set<Workout> filterAndGetWorkoutRefs(Set<WorkouReferenceDTO> refs, User user) {
+    public Set<Workout> filterAndGetWorkoutRefs(Set<WorkoutReferenceDTO> refs, User user) {
         Set<Workout> workouts = new HashSet<>();
         if (refs == null || refs.isEmpty()) {
             log.info("returning a empty workout refs set");

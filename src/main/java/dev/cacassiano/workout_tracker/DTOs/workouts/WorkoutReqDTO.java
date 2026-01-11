@@ -1,6 +1,6 @@
 package dev.cacassiano.workout_tracker.DTOs.workouts;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
@@ -20,7 +20,7 @@ public class WorkoutReqDTO {
     private final String schedule_type;
 
     @NotNull(message = "schedule_date cannot be null")
-    private final LocalDateTime scheduled_date;
+    private final LocalDate scheduled_date;
 
     @NotNull(message = "completed cannot be null")
     private final Boolean completed;
@@ -28,7 +28,7 @@ public class WorkoutReqDTO {
     @NotEmpty(message = "exercises cannot be empty")
     private final Set<ExerciseReferenceReqDTO> exercises;
 
-    public WorkoutReqDTO(String title, String schedule_type, LocalDateTime scheduled_date, Boolean completed, Set<ExerciseReferenceReqDTO> exercises){
+    public WorkoutReqDTO(String title, String schedule_type, LocalDate scheduled_date, Boolean completed, Set<ExerciseReferenceReqDTO> exercises){
         this.title = title;
         if (schedule_type == null) {
             throw new IllegalArgumentException("schedule_type cant be null");

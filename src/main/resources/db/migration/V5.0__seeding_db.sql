@@ -23,17 +23,17 @@ VALUES ('Supino Reto', 12, 4),
     ('Corrida na Esteira', 30, 1);
 
 -- Inserindo 10 workouts
-INSERT INTO workouts (title, scheduled_date, schedule_type, completed, created_at, updated_at) 
-VALUES ('Treino de Peito', '2025-12-08 07:00:00', 'WEEKLY', false, NOW(), NOW()),
-    ('Treino de Costas', '2025-12-09 07:00:00', 'WEEKLY', false, NOW(), NOW()),
-    ('Treino de Pernas', '2025-12-10 07:00:00', 'WEEKLY', false, NOW(), NOW()),
-    ('Treino de Ombro', '2025-12-11 07:00:00', 'DAYLY', false, NOW(), NOW()),
-    ('Treino de Braço', '2025-12-12 07:00:00', 'DAYLY', false, NOW(), NOW()),
-    ('Treino de Core', '2025-12-13 07:00:00', 'DAYLY', false, NOW(), NOW()),
-    ('Treino Cardio', '2025-12-14 07:00:00', 'MONTHLY', false, NOW(), NOW()),
-    ('Treino Full Body A', '2025-12-15 07:00:00', 'ONCE', true, NOW(), NOW()),
-    ('Treino Full Body B', '2025-12-16 07:00:00', 'ONCE', true, NOW(), NOW()),
-    ('Treino Intenso', '2025-12-17 07:00:00', 'WEEKLY', false, NOW(), NOW());
+INSERT INTO workouts (title, scheduled_date, schedule_type, completed, created_at, updated_at, scheduled_week_day) 
+VALUES ('Treino de Peito', '2025-12-08 07:00:00', 'WEEKLY', false, NOW(), NOW(), 0),
+    ('Treino de Costas', '2025-12-09 07:00:00', 'WEEKLY', false, NOW(), NOW(), 0),
+    ('Treino de Pernas', '2025-12-10 07:00:00', 'WEEKLY', false, NOW(), NOW(), 0),
+    ('Treino de Ombro', '2025-12-11 07:00:00', 'DAYLY', false, NOW(), NOW(), 0),
+    ('Treino de Braço', '2025-12-12 07:00:00', 'DAYLY', false, NOW(), NOW(), 0),
+    ('Treino de Core', '2025-12-13 07:00:00', 'DAYLY', false, NOW(), NOW(), 0),
+    ('Treino Cardio', '2025-12-14 07:00:00', 'MONTHLY', false, NOW(), NOW(), 0),
+    ('Treino Full Body A', '2025-12-15 07:00:00', 'ONCE', true, NOW(), NOW(), 0),
+    ('Treino Full Body B', '2025-12-16 07:00:00', 'ONCE', true, NOW(), NOW(), 0),
+    ('Treino Intenso', '2025-12-17 07:00:00', 'WEEKLY', false, NOW(), NOW(), 0);
 
 INSERT INTO workout_exercises (workout_id, exercise_id) 
 VALUES (1, 1),

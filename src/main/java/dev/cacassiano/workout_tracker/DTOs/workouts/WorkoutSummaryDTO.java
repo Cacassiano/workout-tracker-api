@@ -1,5 +1,6 @@
 package dev.cacassiano.workout_tracker.DTOs.workouts;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 public class WorkoutSummaryDTO{
     Long id;
     String title;
-    LocalDateTime scheduled_date;
+    LocalDate scheduled_date;
     String schedule_type;
     Boolean completed;
     LocalDateTime created_at;

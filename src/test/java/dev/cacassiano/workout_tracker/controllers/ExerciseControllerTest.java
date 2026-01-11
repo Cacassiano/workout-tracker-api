@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -90,7 +91,7 @@ class ExerciseControllerTest {
         mockWorkout = new Workout();
         mockWorkout.setId(1L);
         mockWorkout.setTitle("Test Workout");
-        mockWorkout.setScheduledDate(LocalDateTime.now());
+        mockWorkout.setScheduledDate(LocalDate.now());
         mockWorkout.setScheduleType("WEEKLY");
         mockWorkout.setCompleted(false);
         mockWorkout.setCreatedAt(LocalDateTime.now());

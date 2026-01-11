@@ -1,5 +1,6 @@
 package dev.cacassiano.workout_tracker.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class Workout {
         this.scheduleType = req.getSchedule_type();
         this.scheduledDate = req.getScheduled_date();
         this.completed = req.getCompleted();
+        this.scheduledDayOfWeek = scheduledDate.getDayOfWeek().getValue();
         this.exercises = exercises;
         if (user != null) {
             this.user = user;
@@ -49,6 +51,7 @@ public class Workout {
         this.scheduleType = w.getScheduleType();
         this.scheduledDate = w.getScheduledDate();
         this.completed = w.getCompleted();
+        this.scheduledDayOfWeek = w.getScheduledDayOfWeek();
         this.exercises = w.getExercises();
         this.user = w.getUser();
     }
@@ -78,7 +81,10 @@ public class Workout {
     private String title;
 
     @Column(name = "scheduled_date", unique = false, nullable = false)
-    private LocalDateTime scheduledDate;
+    private LocalDate scheduledDate;
+
+    @Column(name = "scheduled_week_day", unique = false, nullable = false)
+    private Integer scheduledDayOfWeek;
 
     @Column(name = "schedule_type", length = 7, nullable = false, unique = false)
     private String scheduleType;

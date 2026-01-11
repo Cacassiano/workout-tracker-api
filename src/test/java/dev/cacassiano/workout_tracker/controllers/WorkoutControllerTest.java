@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -108,7 +109,7 @@ class WorkoutControllerTest {
         mockWorkout = new Workout();
         mockWorkout.setId(1L);
         mockWorkout.setTitle("Test Workout");
-        mockWorkout.setScheduledDate(LocalDateTime.now());
+        mockWorkout.setScheduledDate(LocalDate.now());
         mockWorkout.setScheduleType("WEEKLY");
         mockWorkout.setCompleted(false);
         mockWorkout.setCreatedAt(LocalDateTime.now());
@@ -227,7 +228,7 @@ class WorkoutControllerTest {
         WorkoutReqDTO reqDTO = new WorkoutReqDTO(
             "New Workout",
             "WEEKLY",
-            LocalDateTime.now(),
+            LocalDate.now(),
             false,
             Collections.singleton(new ExerciseReferenceReqDTO(1l, null, null, null, null))
         );
@@ -270,7 +271,7 @@ class WorkoutControllerTest {
         WorkoutReqDTO reqDTO = new WorkoutReqDTO(
             "Updated Workout",
             "MONTHLY",
-            LocalDateTime.now(),
+            LocalDate.now(),
             true,
             Collections.singleton(new ExerciseReferenceReqDTO(1l, null, null, null, null))
         );

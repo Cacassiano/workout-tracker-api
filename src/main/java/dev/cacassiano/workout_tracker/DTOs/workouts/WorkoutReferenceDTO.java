@@ -1,6 +1,7 @@
 package dev.cacassiano.workout_tracker.DTOs.workouts;
 
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 
 import dev.cacassiano.workout_tracker.services.enums.ScheduleTypes;
 import jakarta.validation.ConstraintViolationException;
@@ -14,11 +15,11 @@ public class WorkoutReferenceDTO {
 
     private String schedule_type;
 
-    private LocalDateTime scheduled_date;
+    private LocalDate scheduled_date;
 
     private Boolean completed;
 
-    public WorkoutReferenceDTO(Long id, String title, String schedule_type, LocalDateTime scheduled_date, Boolean completed){
+    public WorkoutReferenceDTO(Long id, String title, String schedule_type, LocalDate scheduled_date, Boolean completed){
         if (id != null) {
             this.id = id;
             return;

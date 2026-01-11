@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.cacassiano.workout_tracker.DTOs.auth.TokenDTO;
 import dev.cacassiano.workout_tracker.DTOs.auth.UserRequestDTO;
-import dev.cacassiano.workout_tracker.services.auth.UserService;
+import dev.cacassiano.workout_tracker.use_cases.services.auth.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 

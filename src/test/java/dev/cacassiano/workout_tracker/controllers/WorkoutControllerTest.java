@@ -44,10 +44,10 @@ import dev.cacassiano.workout_tracker.entities.Exercise;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.entities.Workout;
 import dev.cacassiano.workout_tracker.errors.custom.NotFoundException;
-import dev.cacassiano.workout_tracker.services.ExerciseService;
-import dev.cacassiano.workout_tracker.services.WorkoutService;
-import dev.cacassiano.workout_tracker.services.auth.JwtService;
-import dev.cacassiano.workout_tracker.services.auth.UserService;
+import dev.cacassiano.workout_tracker.use_cases.services.ExerciseService;
+import dev.cacassiano.workout_tracker.use_cases.services.WorkoutService;
+import dev.cacassiano.workout_tracker.use_cases.services.auth.JwtService;
+import dev.cacassiano.workout_tracker.use_cases.services.auth.UserService;
 
 @SpringBootTest
 @DisplayName("WorkoutController Tests")

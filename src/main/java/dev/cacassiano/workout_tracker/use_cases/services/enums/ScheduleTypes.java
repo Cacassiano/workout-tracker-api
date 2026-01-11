@@ -1,4 +1,4 @@
-package dev.cacassiano.workout_tracker.services.enums;
+package dev.cacassiano.workout_tracker.use_cases.services.enums;
 
 public enum ScheduleTypes {
     ONCE,

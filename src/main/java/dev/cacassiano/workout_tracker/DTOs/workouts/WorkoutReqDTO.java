@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import dev.cacassiano.workout_tracker.DTOs.exercises.ExerciseReferenceReqDTO;
-import dev.cacassiano.workout_tracker.services.enums.ScheduleTypes;
+import dev.cacassiano.workout_tracker.use_cases.services.enums.ScheduleTypes;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

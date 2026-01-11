@@ -3,7 +3,7 @@ package dev.cacassiano.workout_tracker.DTOs.workouts;
 
 import java.time.LocalDate;
 
-import dev.cacassiano.workout_tracker.services.enums.ScheduleTypes;
+import dev.cacassiano.workout_tracker.use_cases.services.enums.ScheduleTypes;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
 

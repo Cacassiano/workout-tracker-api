@@ -1,4 +1,4 @@
-package dev.cacassiano.workout_tracker.services;
+package dev.cacassiano.workout_tracker.use_cases.services;
 
 import java.util.HashSet;
 import java.util.Set;

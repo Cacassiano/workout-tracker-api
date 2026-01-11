@@ -1,4 +1,4 @@
-package dev.cacassiano.workout_tracker.services.auth;
+package dev.cacassiano.workout_tracker.use_cases.services.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,4 +1,4 @@
-package dev.cacassiano.workout_tracker.services.auth;
+package dev.cacassiano.workout_tracker.use_cases.services.auth;
 
 import java.util.Date;
 

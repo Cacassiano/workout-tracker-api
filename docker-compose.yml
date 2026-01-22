@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:14.19-alpine3.21
+    environment:
+      - POSTGRES_DB=workoutdb
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    ports:
+      - 5432:5432
+  workout-service:
+    build: .
+    ports:
+      - 8080:8080
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/workoutdb
+      - DB_PASSWORD=postgres
+      - DB_USER=postgres
+      - JWT_SECRET=secretkey
+      - JWT_EXPIRATON=86400000
+    depends_on:
+      - db
+    

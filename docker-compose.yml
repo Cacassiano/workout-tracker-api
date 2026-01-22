@@ -19,4 +19,14 @@ services:
       - JWT_EXPIRATON=86400000
     depends_on:
       - db
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - workout-service
+    ports:
+      - 9090:9090
     
+  

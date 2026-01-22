@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import dev.cacassiano.workout_tracker.DTOs.auth.UserLoginDTO;
 import dev.cacassiano.workout_tracker.DTOs.auth.UserRequestDTO;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.repositories.UserRepository;
@@ -32,7 +33,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public String authenticate(UserRequestDTO request) {
+    public String authenticate(UserLoginDTO request) {
         User user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new IllegalArgumentException("invalid credentials"));
 

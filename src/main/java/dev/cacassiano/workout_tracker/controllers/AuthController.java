@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.cacassiano.workout_tracker.DTOs.auth.TokenDTO;
+import dev.cacassiano.workout_tracker.DTOs.auth.UserLoginDTO;
 import dev.cacassiano.workout_tracker.DTOs.auth.UserRequestDTO;
 import dev.cacassiano.workout_tracker.use_cases.services.auth.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/login")
     @ApiResponse(description = "Login succesfully and return the token", responseCode = "200")
-    public ResponseEntity<TokenDTO> login(@RequestBody @Valid UserRequestDTO request) throws MethodArgumentNotValidException{
+    public ResponseEntity<TokenDTO> login(@RequestBody @Valid UserLoginDTO request) throws MethodArgumentNotValidException{
         String token = authService.authenticate(request);
         return ResponseEntity.ok(new TokenDTO(token));
     }

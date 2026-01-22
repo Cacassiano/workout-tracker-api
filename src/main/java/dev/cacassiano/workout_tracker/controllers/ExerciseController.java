@@ -59,7 +59,6 @@ public class ExerciseController {
 
     @GetMapping
     @ApiResponse(responseCode = "200", description = "gets the Exercises")
-    // TODO if a exercise dont have a workout it doesnt appear where withWorkouts = true
     public ResponseEntity<PageDTO<? extends ExerciseSummaryDTO>> getAll(
         Pageable pageable,
         @RequestParam("withWorkouts") Boolean withWorkouts,
@@ -95,7 +94,6 @@ public class ExerciseController {
         String userId = jwtService.getIdFromToken(token.getToken());
         log.info("user id: {}", userId);
         User user = userService.getUserReferenceById(userId);
-        req.getWorkouts().forEach(w -> log.info(w.toString()));
 
 
         // filter the workouts from the request

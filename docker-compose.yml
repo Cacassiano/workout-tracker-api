@@ -8,7 +8,7 @@ services:
     ports:
       - 5432:5432
   workout-service:
-    build: .
+    build: workout-service/.
     ports:
       - 8080:8080
     environment:
@@ -23,10 +23,8 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
       - workout-service
     ports:
       - 9090:9090
-    
-  

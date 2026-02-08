@@ -20,8 +20,8 @@ public class WorkoutScheduler {
     private UserRepository userRepository; 
     private final int FETCH_LIMIT = 1000;
 
-    @Async
-    @Scheduled(cron = "0 54 20 * * ?")
+    @Async("schedulerPoolExecutor")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void notifyWorkouts() {
         LocalDate today = LocalDate.now();
         int weekDay = today.getDayOfWeek().getValue();
@@ -51,7 +51,7 @@ public class WorkoutScheduler {
             // Clears the arrays (Reduce garbage collector trash)
             users.clear();
         }
-        log.info("{} users processeds", offset+1);
+        log.info("{} users processed", offset == 0 ? 0 : offset+1);
     }
 
 }

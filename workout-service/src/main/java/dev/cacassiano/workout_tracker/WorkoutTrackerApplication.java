@@ -33,13 +33,14 @@ public class WorkoutTrackerApplication {
 		return mapper;
 	}
 
-	public ThreadPoolTaskExecutor threadPoolExecutor() {
+	@Bean
+	public ThreadPoolTaskExecutor schedulerPoolExecutor() {
 		ThreadPoolTaskExecutor pool = new ThreadPoolTaskExecutor();
-		pool.setCorePoolSize(2);
-		pool.setMaxPoolSize(4);
-		pool.setKeepAliveSeconds(300);
+		pool.setCorePoolSize(1);
+		pool.setMaxPoolSize(2);
+		pool.setKeepAliveSeconds(120);
 		pool.setQueueCapacity(25);
-		pool.setThreadNamePrefix("MainAsyncThread-");
+		pool.setThreadNamePrefix("SchedulerThread-");
 
 		return pool;
 	}

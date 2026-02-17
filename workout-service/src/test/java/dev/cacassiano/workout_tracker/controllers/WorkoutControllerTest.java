@@ -270,7 +270,7 @@ class WorkoutControllerTest {
     void testUpdateWorkoutSuccess() throws Exception {
         WorkoutReqDTO reqDTO = new WorkoutReqDTO(
             "Updated Workout",
-            "MONTHLY",
+            "DAILY",
             LocalDate.now(),
             true,
             Collections.singleton(new ExerciseReferenceReqDTO(1l, null, null, null, null))
@@ -279,7 +279,7 @@ class WorkoutControllerTest {
         Workout resWorkout = new Workout(mockWorkout);
         resWorkout.setCompleted(true);
         resWorkout.setTitle("Updated Workout");
-        resWorkout.setScheduleType("MONTHLY");
+        resWorkout.setScheduleType("DAILY");
 
         when(workoutService.updateWorkout(any(WorkoutReqDTO.class), eq(1L), any(User.class), any(Set.class)))
             .thenReturn(resWorkout);
@@ -294,7 +294,7 @@ class WorkoutControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.id").value(1))
             .andExpect(jsonPath("$.data.title").value("Updated Workout"))
-            .andExpect(jsonPath("$.data.schedule_type").value("MONTHLY"))
+            .andExpect(jsonPath("$.data.schedule_type").value("DAILY"))
             .andExpect(jsonPath("$.data.completed").value(true));
     }
 

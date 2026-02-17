@@ -4,10 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import dev.cacassiano.workout_tracker.DTOs.kafka.NotificationMessage;
+import dev.cacassiano.workout_tracker.DTOs.kafka.UserNotificationDTO;
 import dev.cacassiano.workout_tracker.entities.User;
 import dev.cacassiano.workout_tracker.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,9 @@ public class WorkoutScheduler {
 
     @Autowired
     private UserRepository userRepository; 
+    @Autowired
+    private KafkaTemplate<String, NotificationMessage> template;
+    private final String NOTICATION_TOPIC = "workout-notification-topic";
     private final int FETCH_LIMIT = 1000;
 
     @Async("schedulerPoolExecutor")
@@ -46,8 +52,10 @@ public class WorkoutScheduler {
             }
             // Publising in notification topic
             log.info("Sending {} users for the kafka notification-topic", numUsers);
-            users.forEach(e -> System.out.println("email:" + e.getEmail()));
-
+            // TODO improve legibility
+            template.send(NOTICATION_TOPIC, new NotificationMessage(
+                users.stream().map(UserNotificationDTO::new).toList()
+            ));
             // Clears the arrays (Reduce garbage collector trash)
             users.clear();
         }

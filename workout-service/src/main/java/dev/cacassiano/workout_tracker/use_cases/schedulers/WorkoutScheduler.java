@@ -52,14 +52,12 @@ public class WorkoutScheduler {
             }
             // Publising in notification topic
             log.info("Sending {} users for the kafka notification-topic", numUsers);
-            // TODO improve legibility
-            template.send(NOTICATION_TOPIC, new NotificationMessage(
-                users.stream().map(UserNotificationDTO::new).toList()
-            ));
+            List<UserNotificationDTO> userDTOs = users.stream().map(UserNotificationDTO::new).toList();
+            template.send(NOTICATION_TOPIC, new NotificationMessage(userDTOs));
             // Clears the arrays (Reduce garbage collector trash)
             users.clear();
         }
-        log.info("{} users processed", offset == 0 ? 0 : offset+1);
+        log.info("{} users processed", offset);
     }
 
 }

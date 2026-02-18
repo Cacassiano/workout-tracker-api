@@ -1,4 +1,4 @@
 package dev.cacassiano.notification_service.DTOs;
 
-public record User(String email) {
+public record User(String email, String username) {
 }

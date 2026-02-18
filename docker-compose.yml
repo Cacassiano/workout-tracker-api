@@ -36,6 +36,10 @@ services:
     environment:
       - server.port=8081
       - KAFKA_HOST=kafka:9092
+      - EMAIL=<Your email>
+      - EMAIL_PASSWORD=<your password>
+      - EMAIL_HOST=<your email host>
+      - EMAIL_PORT=<your email host port>
 
   prometheus:
     depends_on:

@@ -95,3 +95,5 @@ A PostgreSQL database is used for data persistence. You can connect to it using 
 - **Database**: `workoutdb`
 - **User**: `postgres`
 - **Password**: `postgres`
+
+https://roadmap.sh/projects/fitness-workout-tracker
